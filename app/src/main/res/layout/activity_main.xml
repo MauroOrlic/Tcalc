@@ -50,11 +50,31 @@
         app:layout_constraintBottom_toBottomOf="@+id/demandText"
         app:layout_constraintStart_toEndOf="@+id/demandText" />
 
+    <CheckBox
+        android:id="@+id/usingMODI"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:text="MODI"
+        app:layout_constraintBottom_toTopOf="@+id/usingSteppingStone"
+        app:layout_constraintStart_toStartOf="@+id/usingSteppingStone" />
+
+    <CheckBox
+        android:id="@+id/usingSteppingStone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:text="Stepping Stone"
+        app:layout_constraintBottom_toBottomOf="@+id/demandText"
+        app:layout_constraintEnd_toEndOf="parent" />
+
     <ScrollView
+        android:id="@+id/scrollView2"
         android:layout_width="match_parent"
         android:layout_height="657dp"
         android:layout_margin="8dp"
-        app:layout_constraintTop_toBottomOf="@+id/demandText">
+        app:layout_constraintTop_toBottomOf="@+id/demandText"
+        tools:layout_editor_absoluteX="8dp">
 
         <TableLayout
             android:layout_width="match_parent"
