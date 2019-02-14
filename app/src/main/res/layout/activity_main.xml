@@ -9,52 +9,50 @@
     <TextView
         android:id="@+id/sourcesText"
         android:layout_width="wrap_content"
+        android:layout_marginBottom="0dp"
         android:layout_height="48dp"
-        android:layout_marginStart="80dp"
-        android:layout_marginTop="80dp"
         android:gravity="center"
         android:text="Sources:"
-
         android:textSize="18sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintBottom_toTopOf="@+id/destinationsText"
+        app:layout_constraintEnd_toEndOf="@+id/destinationsText" />
 
     <EditText
         android:id="@+id/sourcesInput"
+        android:layout_marginLeft="8dp"
         android:layout_width="48dp"
         android:layout_height="48dp"
-        android:layout_marginStart="4dp"
         android:ems="10"
         android:inputType="number"
         android:text="3"
-        app:layout_constraintStart_toEndOf="@id/sourcesText"
-        app:layout_constraintTop_toTopOf="@id/sourcesText" />
+        app:layout_constraintBottom_toBottomOf="@+id/sourcesText"
+        app:layout_constraintStart_toEndOf="@+id/sourcesText" />
 
     <TextView
         android:id="@+id/destinationsText"
         android:layout_width="wrap_content"
         android:layout_height="48dp"
-        android:layout_marginTop="4dp"
-        android:layout_marginEnd="4dp"
+        android:layout_marginStart="0dp"
+        android:layout_marginTop="128dp"
         android:gravity="center"
         android:text="Destinations:"
         android:textSize="18sp"
-        app:layout_constraintEnd_toStartOf="@+id/destinationsInput"
-        app:layout_constraintTop_toBottomOf="@+id/sourcesText" />
+        app:layout_constraintStart_toStartOf="@+id/tableLayout"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
         android:id="@+id/destinationsInput"
+        android:layout_marginLeft="8dp"
         android:layout_width="48dp"
         android:layout_height="48dp"
-        android:layout_marginStart="4dp"
-        android:layout_marginTop="4dp"
         android:ems="10"
         android:inputType="number"
         android:text="3"
-        app:layout_constraintStart_toEndOf="@+id/sourcesText"
-        app:layout_constraintTop_toBottomOf="@+id/sourcesInput" />
+        app:layout_constraintBottom_toBottomOf="@+id/destinationsText"
+        app:layout_constraintStart_toEndOf="@+id/destinationsText" />
 
     <TableLayout
+        android:id="@+id/tableLayout"
         android:layout_width="match_parent"
         android:layout_height="500dp"
         android:layout_margin="8dp"
