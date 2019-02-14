@@ -31,7 +31,7 @@
         android:id="@+id/demandText"
         android:layout_width="wrap_content"
         android:layout_height="48dp"
-        android:layout_marginTop="128dp"
+        android:layout_marginTop="70dp"
         android:gravity="center"
         android:text="Demand:"
         android:textSize="18sp"
@@ -52,10 +52,14 @@
     <TableLayout
         android:id="@+id/tableLayout"
         android:layout_width="match_parent"
-        android:layout_height="500dp"
+        android:layout_height="600dp"
         android:layout_margin="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/demandText">
 
         <TableRow
             android:layout_width="match_parent"
