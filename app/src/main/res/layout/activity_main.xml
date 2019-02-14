@@ -7,49 +7,47 @@
     tools:context=".MainActivity">
 
     <TextView
-        android:id="@+id/sourcesText"
+        android:id="@+id/supplyText"
         android:layout_width="wrap_content"
-        android:layout_marginBottom="0dp"
         android:layout_height="48dp"
         android:gravity="center"
-        android:text="Sources:"
+        android:text="Supply:"
         android:textSize="18sp"
-        app:layout_constraintBottom_toTopOf="@+id/destinationsText"
-        app:layout_constraintEnd_toEndOf="@+id/destinationsText" />
+        app:layout_constraintBottom_toTopOf="@+id/demandText"
+        app:layout_constraintEnd_toEndOf="@+id/demandText" />
 
     <EditText
-        android:id="@+id/sourcesInput"
-        android:layout_marginLeft="8dp"
+        android:id="@+id/supplyInput"
         android:layout_width="48dp"
         android:layout_height="48dp"
+        android:layout_marginStart="8dp"
         android:ems="10"
         android:inputType="number"
         android:text="3"
-        app:layout_constraintBottom_toBottomOf="@+id/sourcesText"
-        app:layout_constraintStart_toEndOf="@+id/sourcesText" />
+        app:layout_constraintBottom_toBottomOf="@+id/supplyText"
+        app:layout_constraintStart_toEndOf="@+id/supplyText" />
 
     <TextView
-        android:id="@+id/destinationsText"
+        android:id="@+id/demandText"
         android:layout_width="wrap_content"
         android:layout_height="48dp"
-        android:layout_marginStart="0dp"
         android:layout_marginTop="128dp"
         android:gravity="center"
-        android:text="Destinations:"
+        android:text="Demand:"
         android:textSize="18sp"
         app:layout_constraintStart_toStartOf="@+id/tableLayout"
         app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
-        android:id="@+id/destinationsInput"
-        android:layout_marginLeft="8dp"
+        android:id="@+id/demandInput"
         android:layout_width="48dp"
         android:layout_height="48dp"
+        android:layout_marginStart="8dp"
         android:ems="10"
         android:inputType="number"
         android:text="3"
-        app:layout_constraintBottom_toBottomOf="@+id/destinationsText"
-        app:layout_constraintStart_toEndOf="@+id/destinationsText" />
+        app:layout_constraintBottom_toBottomOf="@+id/demandText"
+        app:layout_constraintStart_toEndOf="@+id/demandText" />
 
     <TableLayout
         android:id="@+id/tableLayout"
