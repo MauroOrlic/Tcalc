@@ -1,3 +1,11 @@
 <resources>
     <string name="app_name">Tcalc</string>
+    <string name="supplyInput">3</string>
+    <string name="supplyText">Supply:</string>
+    <string name="demandInput">3</string>
+    <string name="initialSolutionMethodText">Initial feesible solution</string>
+    <string name="modi">MODI</string>
+    <string name="demandText">Demand:</string>
+    <string name="stepping_stone">Stepping Stone</string>
+    <string name="solution_optimizationText">Solution optimization</string>
 </resources>

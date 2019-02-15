@@ -10,9 +10,9 @@
         android:id="@+id/supplyText"
         android:layout_width="wrap_content"
         android:layout_height="48dp"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="16dp"
         android:gravity="center"
-        android:text="Supply:"
+        android:text="@string/supplyText"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="@+id/demandText"
         app:layout_constraintTop_toTopOf="parent" />
@@ -22,9 +22,10 @@
         android:layout_width="32dp"
         android:layout_height="48dp"
         android:layout_marginStart="8dp"
+        android:autofillHints="Number of supplies"
         android:ems="10"
         android:inputType="number"
-        android:text="3"
+        android:text="@string/supplyInput"
         app:layout_constraintBottom_toBottomOf="@+id/supplyText"
         app:layout_constraintStart_toEndOf="@+id/supplyText" />
 
@@ -32,9 +33,10 @@
         android:id="@+id/demandText"
         android:layout_width="wrap_content"
         android:layout_height="48dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="32dp"
         android:gravity="center"
-        android:text="Demand:"
+        android:text="@string/demandText"
         android:textSize="18sp"
         app:layout_constraintStart_toStartOf="@+id/scrollView2"
         app:layout_constraintTop_toBottomOf="@+id/supplyText" />
@@ -46,35 +48,59 @@
         android:layout_marginStart="8dp"
         android:ems="10"
         android:inputType="number"
-        android:text="3"
+        android:text="@string/demandInput"
         app:layout_constraintBottom_toBottomOf="@+id/demandText"
-        app:layout_constraintStart_toEndOf="@+id/demandText" />
+        app:layout_constraintStart_toEndOf="@+id/demandText"
+        android:autofillHints="" />
+
+    <TextView
+        android:id="@+id/initialSolutionMethodText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/initialSolutionMethodText"
+        app:layout_constraintStart_toStartOf="@+id/initialSolutionMethod"
+        app:layout_constraintTop_toTopOf="@+id/supplyText" />
+
+    <Spinner
+        android:id="@+id/initialSolutionMethod"
+        android:layout_width="0dp"
+        android:layout_height="24dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintEnd_toEndOf="@+id/usingSteppingStone"
+        app:layout_constraintStart_toStartOf="@+id/usingMODI"
+        app:layout_constraintTop_toBottomOf="@+id/initialSolutionMethodText" />
+
+    <TextView
+        android:id="@+id/optimizationMethods"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/solution_optimizationText"
+        app:layout_constraintBottom_toTopOf="@+id/usingSteppingStone"
+        app:layout_constraintStart_toStartOf="@+id/usingMODI" />
 
     <CheckBox
         android:id="@+id/usingMODI"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:text="MODI"
+        android:layout_marginStart="48dp"
+        android:text="@string/modi"
         app:layout_constraintBottom_toBottomOf="@+id/usingSteppingStone"
-        app:layout_constraintEnd_toStartOf="@+id/usingSteppingStone" />
+        app:layout_constraintStart_toEndOf="@+id/demandInput" />
 
     <CheckBox
         android:id="@+id/usingSteppingStone"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:text="Stepping Stone"
+        android:layout_marginStart="8dp"
+        android:text="@string/stepping_stone"
         app:layout_constraintBottom_toBottomOf="@+id/demandText"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintStart_toEndOf="@+id/usingMODI" />
 
     <ScrollView
         android:id="@+id/scrollView2"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="36dp"
-        android:layout_marginEnd="8dp"
+        android:layout_marginTop="8dp"
         android:layout_marginBottom="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -83,34 +109,8 @@
         app:layout_constraintTop_toBottomOf="@+id/demandText">
 
         <TableLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="match_parent" />
-
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="match_parent" />
-
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="match_parent" />
-
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="match_parent" />
-        </TableLayout>
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
     </ScrollView>
-
-    <Spinner
-        android:id="@+id/spinner"
-        android:layout_width="0dp"
-        android:layout_height="23dp"
-        android:layout_marginBottom="8dp"
-        app:layout_constraintBottom_toTopOf="@+id/usingSteppingStone"
-        app:layout_constraintEnd_toEndOf="@+id/usingSteppingStone"
-        app:layout_constraintStart_toStartOf="@+id/usingMODI" />
 
 </android.support.constraint.ConstraintLayout>
