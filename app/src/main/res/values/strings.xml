@@ -8,4 +8,6 @@
     <string name="demandText">Demand:</string>
     <string name="stepping_stone">Stepping Stone</string>
     <string name="solution_optimizationText">Solution optimization</string>
+    <string name="build_table">Build table</string>
+    <string name="solve">Solve</string>
 </resources>
