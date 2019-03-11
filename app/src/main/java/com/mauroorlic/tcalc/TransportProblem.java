@@ -1,6 +1,5 @@
 package com.mauroorlic.tcalc;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class TransportProblem {
@@ -30,7 +29,7 @@ public class TransportProblem {
         numOfDemands = this.demand.size();
         numOfSupplies = this.supply.size();
 
-        fixDegeneracy();
+        closeProblem();
     }
 
     public int getNumOfDemands() {
@@ -50,8 +49,8 @@ public class TransportProblem {
         }
         return totalCost;
     }
-    
-    public void fixDegeneracy() {
+
+    public void closeProblem() {
         Double totalDemand = 0.0;
         Double totalSupply = 0.0;
         for (ResourceCell d : demand) {
