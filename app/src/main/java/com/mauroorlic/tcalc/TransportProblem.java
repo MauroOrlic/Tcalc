@@ -51,6 +51,7 @@ public class TransportProblem {
         return totalCost;
     }
 
+    //needs fix so methods dump only the REMAINDER in dummy row/column
     public void fixDegeneracy() {
         Double totalDemand = 0.0;
         Double totalSupply = 0.0;
@@ -148,8 +149,28 @@ public class TransportProblem {
         }
     }
 
+    //takes an empty cell, scans for all occupied cells on same row, for each cell found, scan for other occupied cells in same column, for each cell found, scan for other occupied cells in same row... if a scanned cell is initial, close loop
+    //always check if selected cells are already in the list, no more than 2 selected cells in same row/column
     private void optimizeMODI() {
 
+        Double[][] OpportunityCost = new Double[supply.size()][demand.size()];
+
+//        CostCell[][] costMatrix = new CostCell[supply.size()][demand.size()];
+//        for(int i=0; i<supply.size();i++){
+//            for(int j=0; j<demand.size(); j++){
+//                costMatrix[i][j] = costTable.get(i).get(j);
+//            }
+//        }
+
+        for(int i =0; i<supply.size();i++){
+            for(int j=0;j<demand.size();j++){
+                if(costTable.get(i).get(j).alloted==0.0){
+
+
+
+                }
+            }
+        }
     }
 
     public void optimizeSteppingStone() {

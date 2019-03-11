@@ -12,6 +12,10 @@ public class CostCell {
         this.cost = cost;
         this.alloted = 0.0;
     }
+    public CostCell() {
+        this.cost = 0.0;
+        this.alloted = 0.0;
+    }
 
     public Double getCost() {
         return cost;
