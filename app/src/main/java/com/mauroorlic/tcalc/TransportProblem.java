@@ -97,6 +97,7 @@ public class TransportProblem {
 
     public void initialNorthWest(Boolean optimizeMODI, Boolean optimizeSteppingStone) {
         clearSolution();
+        closeProblem();
         int currentDemand = 0;
         int currentSupply = 0;
         Double alloted = 0.0;
