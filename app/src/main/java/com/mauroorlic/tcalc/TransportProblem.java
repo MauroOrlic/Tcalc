@@ -50,8 +50,7 @@ public class TransportProblem {
         }
         return totalCost;
     }
-
-    //needs fix so methods dump only the REMAINDER in dummy row/column
+    
     public void fixDegeneracy() {
         Double totalDemand = 0.0;
         Double totalSupply = 0.0;
