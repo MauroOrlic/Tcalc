@@ -6,6 +6,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.InputType;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,6 +28,8 @@ public class MainActivity extends AppCompatActivity {
     List<EditText> supplyTable = new ArrayList<>();
     List<EditText> demandTable = new ArrayList<>();
 
+    int supply, demand;
+
     final int DEMAND_MAX = 10;
     final int CELL_WIDTH = 32;
     final int CELL_HEIGHT = 32;
@@ -44,7 +47,6 @@ public class MainActivity extends AppCompatActivity {
         buildTableButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int supply, demand;
                 try {
                     supply = Integer.parseInt(supplyInput.getText().toString());
                     demand = Integer.parseInt(demandInput.getText().toString());
@@ -57,6 +59,14 @@ public class MainActivity extends AppCompatActivity {
                     return;
                 }
                 generateGrid(supply, demand);
+            }
+        });
+
+        Button calculateButton = findViewById(R.id.solve_button);
+        calculateButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                transform();
             }
         });
 
@@ -126,5 +136,34 @@ public class MainActivity extends AppCompatActivity {
 
     private int toPx(int dp){
         return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, getResources().getDisplayMetrics());
+    }
+
+    void transform(){
+        ArrayList<ArrayList<Double>> costTableList = new ArrayList<>();
+        ArrayList<Double> supplyList = new ArrayList<>();
+        ArrayList<Double> demandList = new ArrayList<>();
+
+
+        for(int i=0; i<supply; i++){
+            costTableList.add(new ArrayList<Double>());
+            for(int j=0; j<demand; j++){
+                //TODO: Try catch stuff
+                costTableList.get(i).add(Double.parseDouble(costTable.get(i*demand + j).getText().toString()));
+            }
+        }
+
+        for(int i=0; i<supplyTable.size(); i++){
+            //TODO: Pokusaj, uhvati
+            supplyList.add(Double.parseDouble(supplyTable.get(i).getText().toString()));
+        }
+
+        for(int i=0; i<demandTable.size(); i++){
+            //TODO: Povuci potegni
+            demandList.add(Double.parseDouble(demandTable.get(i).getText().toString()));
+        }
+
+        TransportProblem transportProblem = new TransportProblem(demandList, supplyList, costTableList);
+        transportProblem.initialNorthWest(false, false);
+        Log.d(TAG, "transform: " + transportProblem.costTable);
     }
 }

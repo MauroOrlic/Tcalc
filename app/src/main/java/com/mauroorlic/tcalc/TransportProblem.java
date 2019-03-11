@@ -5,9 +5,9 @@ import java.util.ArrayList;
 public class TransportProblem {
     int numOfDemands;
     int numOfSupplies;
-    ArrayList<ResourceCell> demand;
-    ArrayList<ResourceCell> supply;
-    ArrayList<ArrayList<CostCell>> costTable;
+    ArrayList<ResourceCell> demand = new ArrayList<>();
+    ArrayList<ResourceCell> supply = new ArrayList<>();
+    ArrayList<ArrayList<CostCell>> costTable = new ArrayList<>();
 
     public TransportProblem(ArrayList<Double> demand, ArrayList<Double> supply, ArrayList<ArrayList<Double>> costTable) {
         //entering raw demands into demand arraylist
@@ -101,7 +101,7 @@ public class TransportProblem {
         int currentDemand = 0;
         int currentSupply = 0;
         Double alloted = 0.0;
-        for (int step = 0; step < demand.size() + supply.size() - 1; step++) {
+        while (currentDemand<numOfDemands && currentSupply<numOfSupplies) {
 
             alloted = Math.min(demand.get(currentDemand).remaining, supply.get(currentSupply).remaining);
             costTable.get(currentSupply).get(currentDemand).setAlloted(alloted);
@@ -109,6 +109,7 @@ public class TransportProblem {
             supply.get(currentSupply).remaining -= alloted;
             demand.get(currentDemand).remaining -= alloted;
 
+            int counter = 0;
             if (supply.get(currentSupply).remaining == 0.0) {
                 currentSupply += 1;
             }
@@ -116,6 +117,7 @@ public class TransportProblem {
                 currentDemand += 1;
             }
         }
+
 
         if (optimizeMODI) {
             optimizeMODI();
