@@ -105,6 +105,14 @@
         android:text="@string/build_table"
         app:layout_constraintEnd_toEndOf="@id/demandInput"
         />
+    <Button
+        android:id="@+id/solve_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/solve"
+        app:layout_constraintStart_toStartOf="@id/usingMODI"
+        app:layout_constraintTop_toTopOf="@id/build_table"
+        />
 
     <ScrollView
         android:id="@+id/scrollView2"
@@ -117,29 +125,34 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/build_table">
-        <android.support.constraint.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
 
-        <TableLayout
-            android:id="@+id/input_grid"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:gravity="center"
-            />
+        <HorizontalScrollView
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_gravity="center_horizontal">
 
-        <Button
-            android:id="@+id/solve_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/solve"
-            app:layout_constraintTop_toBottomOf="@id/input_grid"
-            app:layout_constraintStart_toStartOf="@id/input_grid"
-            />
-        </android.support.constraint.ConstraintLayout>
+            <android.support.constraint.ConstraintLayout
+                android:layout_width="fill_parent"
+                android:layout_height="match_parent">
+
+                <TableLayout
+                    android:id="@+id/input_grid"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+                <TableLayout
+                    android:id="@+id/output_grid"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/input_grid" />
+            </android.support.constraint.ConstraintLayout>
+        </HorizontalScrollView>
     </ScrollView>
 
 

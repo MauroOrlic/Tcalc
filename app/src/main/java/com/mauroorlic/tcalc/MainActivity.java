@@ -24,16 +24,11 @@ public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
 
     TableLayout tableLayout;
-    List<EditText> costTable = new ArrayList<>();
-    List<EditText> supplyTable = new ArrayList<>();
-    List<EditText> demandTable = new ArrayList<>();
     InputTable inputTable;
     TransportProblem transportProblem;
     int supply, demand;
 
-    final int DEMAND_MAX = 10;
-    final int CELL_WIDTH = 32;
-    final int CELL_HEIGHT = 32;
+    final int DEMAND_MAX = 99;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
