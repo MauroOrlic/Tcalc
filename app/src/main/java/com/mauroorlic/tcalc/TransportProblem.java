@@ -31,6 +31,13 @@ public class TransportProblem {
 
         closeProblem();
     }
+    public TransportProblem(TransportProblem transportProblem){
+        this.numOfDemands = transportProblem.numOfDemands;
+        this.numOfSupplies = transportProblem.numOfSupplies;
+        this.demand = transportProblem.demand;
+        this.supply = transportProblem.supply;
+        this.costTable = transportProblem.costTable;
+    }
 
     public int getNumOfDemands() {
         return numOfDemands;
