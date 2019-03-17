@@ -27,7 +27,8 @@ public class MainActivity extends AppCompatActivity {
     List<EditText> costTable = new ArrayList<>();
     List<EditText> supplyTable = new ArrayList<>();
     List<EditText> demandTable = new ArrayList<>();
-
+    InputTable inputTable;
+    TransportProblem transportProblem;
     int supply, demand;
 
     final int DEMAND_MAX = 10;
@@ -58,7 +59,9 @@ public class MainActivity extends AppCompatActivity {
                     Toast.makeText(MainActivity.this, "Too much demand", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                generateGrid(supply, demand);
+                //generateGrid(supply, demand);
+                inputTable = new InputTable(tableLayout,demand, supply);
+                inputTable.buildTable();
             }
         });
 
@@ -66,12 +69,12 @@ public class MainActivity extends AppCompatActivity {
         calculateButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                transform();
+                transportProblem = inputTable.getTransportProblem();
             }
         });
 
     }
-
+/*
     void generateGrid(int supply, int demand){
 
         tableLayout.removeAllViews();
@@ -166,4 +169,5 @@ public class MainActivity extends AppCompatActivity {
         transportProblem.initialNorthWest(false, false);
         Log.d(TAG, "transform: " + transportProblem.costTable);
     }
+    */
 }

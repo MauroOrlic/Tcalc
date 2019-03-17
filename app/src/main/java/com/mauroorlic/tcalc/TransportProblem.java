@@ -1,15 +1,16 @@
 package com.mauroorlic.tcalc;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class TransportProblem {
     int numOfDemands;
     int numOfSupplies;
-    ArrayList<ResourceCell> demand = new ArrayList<>();
-    ArrayList<ResourceCell> supply = new ArrayList<>();
-    ArrayList<ArrayList<CostCell>> costTable = new ArrayList<>();
+    List<ResourceCell> demand = new ArrayList<>();
+    List<ResourceCell> supply = new ArrayList<>();
+    List<ArrayList<CostCell>> costTable = new ArrayList<>();
 
-    public TransportProblem(ArrayList<Double> demand, ArrayList<Double> supply, ArrayList<ArrayList<Double>> costTable) {
+    public TransportProblem(List<Double> demand, List<Double> supply, List<List<Double>> costTable) {
         //entering raw demands into demand arraylist
         for (Double d : demand) {
             this.demand.add(new ResourceCell(d));
@@ -19,7 +20,7 @@ public class TransportProblem {
             this.supply.add(new ResourceCell(s));
         }
         //entering raw costs into costTable
-        for (ArrayList<Double> row : costTable) {
+        for (List<Double> row : costTable) {
 
             this.costTable.add(new ArrayList<CostCell>());
             for (Double e : row) {
