@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="48dp"
+    android:layout_height="48dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="#DFDFDF">
+    <TextView
+        android:layout_width="fill_parent"
+        android:text="2155"
+        android:textStyle="bold"
+        android:textSize="16sp"
+        android:layout_height="fill_parent"
+        android:gravity="center"/>
+
+</android.support.constraint.ConstraintLayout>
