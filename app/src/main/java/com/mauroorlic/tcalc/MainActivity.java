@@ -24,6 +24,7 @@ public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
 
     TableLayout tableLayout;
+    TableLayout outputTableLayout;
     InputTable inputTable;
     TransportProblem transportProblem;
     int supply, demand;
@@ -36,6 +37,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         tableLayout = findViewById(R.id.input_grid);
+        outputTableLayout = findViewById(R.id.output_grid);
+
 
         final EditText supplyInput = findViewById(R.id.supplyInput);
         final EditText demandInput = findViewById(R.id.demandInput);
@@ -64,6 +67,8 @@ public class MainActivity extends AppCompatActivity {
         calculateButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                OutputTable outputTable = new OutputTable(outputTableLayout, inputTable.getTransportProblem());
+                outputTable.buildTable();
                 transportProblem = inputTable.getTransportProblem();
             }
         });

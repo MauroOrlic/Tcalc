@@ -727,6 +727,8 @@ id icon_group
 id ifRoom
 id image
 id inflateable_inputCell
+id inflateable_outputAlloted
+id inflateable_outputCost
 id info
 id initialSolutionMethod
 id initialSolutionMethodText
@@ -757,6 +759,7 @@ id percent
 id progress_circular
 id progress_horizontal
 id radio
+id resourceAmount
 id right
 id right_icon
 id right_side
@@ -803,7 +806,6 @@ id text
 id text2
 id textSpacerNoButtons
 id textSpacerNoTitle
-id textView
 id time
 id title
 id titleDividerNoCustom
@@ -868,7 +870,8 @@ layout notification_template_media
 layout notification_template_media_custom
 layout notification_template_part_chronometer
 layout notification_template_part_time
-layout output_cell
+layout output_cost_cell
+layout output_resource_cell
 layout select_dialog_item_material
 layout select_dialog_multichoice_material
 layout select_dialog_singlechoice_material
