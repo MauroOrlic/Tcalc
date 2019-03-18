@@ -59,6 +59,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 //transportProblem = new TransportProblem(inputTable.getTransportProblem());
+                //TODO uncomment above and comment bellow line to make input actually work
                 transportProblem = inputTable.generateAtozmathStock();
 
                 String selectedInitialMethod = initialSolutionMethod.getSelectedItem().toString();
