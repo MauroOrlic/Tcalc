@@ -3,6 +3,7 @@ package com.mauroorlic.tcalc;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.TableLayout;
 import android.widget.TableRow;
@@ -34,7 +35,19 @@ public class InputTable {
                 View v = inflater.inflate(R.layout.input_cell, tableRow, false);
                 tableRow.addView(v);
                 EditText a = v.findViewById(R.id.inflateable_inputCell);
+                //TODO implement function that creates an edittext and links focuses
                 inputCells.get(i).add(a);
+                inputCells.get(i).get(j).setId(102000 + i*10 + j);
+                inputCells.get(i).get(j).setImeOptions(EditorInfo.IME_ACTION_NEXT);
+                if(i==0 && j==0){
+                    inputCells.get(i).get(j).requestFocus();
+                }
+                else if(j==0){
+                    inputCells.get(i-1).get(numOfDemands-1).setNextFocusForwardId(inputCells.get(i).get(j).getId());
+                }
+                else {
+                    inputCells.get(i).get(j - 1).setNextFocusForwardId(inputCells.get(i).get(j).getId());
+                }
             }
             View v = inflater.inflate(R.layout.input_cell, tableRow, false);
             tableRow.addView(v);

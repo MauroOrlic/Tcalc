@@ -1,4 +1,4 @@
-#Mon Mar 18 23:21:43 CET 2019
+#Mon Mar 18 23:44:52 CET 2019
 base.0=/home/mauro/Workspace/Tcalc/app/build/intermediates/transforms/dexMerger/debug/1
 path.0=classes.dex
 renamed.0=classes.dex
