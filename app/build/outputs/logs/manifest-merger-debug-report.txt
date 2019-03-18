@@ -74,6 +74,8 @@ MERGED from [com.android.support:versionedparcelable:28.0.0] /home/mauro/.gradle
 		ADDED from /home/mauro/Workspace/Tcalc/app/src/main/AndroidManifest.xml:11:9-40
 activity#com.mauroorlic.tcalc.MainActivity
 ADDED from /home/mauro/Workspace/Tcalc/app/src/main/AndroidManifest.xml:12:9-18:20
+	android:screenOrientation
+		ADDED from /home/mauro/Workspace/Tcalc/app/src/main/AndroidManifest.xml:12:48-84
 	android:name
 		ADDED from /home/mauro/Workspace/Tcalc/app/src/main/AndroidManifest.xml:12:19-47
 intent-filter#action:name:android.intent.action.MAIN+category:name:android.intent.category.LAUNCHER

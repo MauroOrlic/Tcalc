@@ -22,12 +22,17 @@ public class TransportProblem {
             this.supply.add(new ResourceCell(s));
         }
         //entering raw costs into costTable
+        Integer rowCount = 0;
+        Integer colCount = 0;
         for (List<Double> row : costTable) {
+            colCount = 0;
 
             this.costTable.add(new ArrayList<CostCell>());
-            for (Double e : row) {
-                this.costTable.get(this.costTable.size() - 1).add(new CostCell(e));
+            for (Double inputCost : row) {
+                this.costTable.get(this.costTable.size() - 1).add(new CostCell(inputCost, rowCount, colCount));
+                colCount++;
             }
+            rowCount++;
         }
         numOfDemands = this.demand.size();
         numOfSupplies = this.supply.size();
@@ -162,27 +167,42 @@ public class TransportProblem {
     //always check if selected cells are already in the list, no more than 2 selected cells in same row/column
     private void optimizeMODI() {
 
-        Double[][] OpportunityCost = new Double[supply.size()][demand.size()];
-
-//        CostCell[][] costMatrix = new CostCell[supply.size()][demand.size()];
-//        for(int i=0; i<supply.size();i++){
-//            for(int j=0; j<demand.size(); j++){
-//                costMatrix[i][j] = costTable.get(i).get(j);
-//            }
-//        }
-
-        for(int i =0; i<supply.size();i++){
-            for(int j=0;j<demand.size();j++){
-                if(costTable.get(i).get(j).alloted==0.0){
-
-
-
-                }
-            }
-        }
     }
 
     public void optimizeSteppingStone() {
 
+    }
+    private List<CostCell> getClosedPath(CostCell s){
+        List<CostCell> path = new ArrayList<CostCell>();
+
+        return  path;
+    }
+    private List<CostCell> getNeighbors(CostCell c, ArrayList<CostCell> list){
+        List<CostCell> neighbors = new ArrayList<CostCell>();
+
+        return neighbors;
+    }
+    private void fixDegenerateCase(){
+        final Double epsilon = Double.MIN_VALUE;
+
+        Integer allotedCellCount = 0;
+        for(ArrayList<CostCell> row : costTable){
+            for(CostCell costCell : row){
+                if(costCell.alloted==0.0){
+                    allotedCellCount++;
+                }
+            }
+        }
+        if(allotedCellCount < numOfSupplies+numOfDemands-1){
+            for(List<CostCell> row : costTable){
+                for(CostCell costCell : row){
+                    if(costCell.alloted==0.0 && getClosedPath(costCell).size()==0){
+                        costCell.alloted = epsilon;
+                        //TODO check if the return bellow actually messes up the solution
+                        return;
+                    }
+                }
+            }
+        }
     }
 }
