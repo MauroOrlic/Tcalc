@@ -58,19 +58,18 @@ public class MainActivity extends AppCompatActivity {
         calculateButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                transportProblem = new TransportProblem(inputTable.getTransportProblem());
+                //transportProblem = new TransportProblem(inputTable.getTransportProblem());
+                transportProblem = inputTable.generateAtozmathStock();
+
                 String selectedInitialMethod = initialSolutionMethod.getSelectedItem().toString();
 
                 if(selectedInitialMethod.contentEquals(adapter.getItem(0))){
-                    Toast.makeText(MainActivity.this, "NW", Toast.LENGTH_SHORT).show();
                     transportProblem.initialNorthWest(usingMODI.isChecked(), usingSteppingStone.isChecked());
                 }
                 else if(selectedInitialMethod.contentEquals(adapter.getItem(1))){
-                    Toast.makeText(MainActivity.this, "LC", Toast.LENGTH_SHORT).show();
                     transportProblem.initialLeastCost(usingMODI.isChecked(), usingSteppingStone.isChecked());
                 }
                 else if(selectedInitialMethod.contentEquals(adapter.getItem(3))){
-                    Toast.makeText(MainActivity.this, "VG", Toast.LENGTH_SHORT).show();
                     transportProblem.initialVogel(usingMODI.isChecked(), usingSteppingStone.isChecked());
                 }
                 OutputTable outputTable = new OutputTable(outputTableLayout, transportProblem);
