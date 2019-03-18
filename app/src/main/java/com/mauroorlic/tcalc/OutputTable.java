@@ -20,8 +20,6 @@ public class OutputTable {
     public void buildTable(){
         DecimalFormat format = new DecimalFormat();
         format.setDecimalSeparatorAlwaysShown(false);
-        //TODO: Ovo makni valjda, samo sam testirao
-        transportProblem.initialNorthWest(false, false);
 
         LayoutInflater inflater = LayoutInflater.from(outputTableReference.getContext());
         for(int i = 0; i<transportProblem.numOfSupplies;i++){
