@@ -1,5 +1,7 @@
 package com.mauroorlic.tcalc;
 
+import android.widget.Toast;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,7 +32,7 @@ public class TransportProblem {
         numOfDemands = this.demand.size();
         numOfSupplies = this.supply.size();
 
-        closeProblem();
+        balanceProblem();
     }
     public TransportProblem(TransportProblem transportProblem){
         this.numOfDemands = transportProblem.numOfDemands;
@@ -58,7 +60,7 @@ public class TransportProblem {
         return totalCost;
     }
 
-    public void closeProblem() {
+    public void balanceProblem() {
         Double totalDemand = 0.0;
         Double totalSupply = 0.0;
         for (ResourceCell d : demand) {
@@ -67,7 +69,7 @@ public class TransportProblem {
         for (ResourceCell s : supply) {
             totalSupply += s.getTotal();
         }
-        if (totalDemand == totalSupply) {
+        if (totalDemand.equals(totalSupply)) {
             return;
         } else if (totalDemand > totalSupply) {
             numOfSupplies += 1;
@@ -105,7 +107,7 @@ public class TransportProblem {
 
     public void initialNorthWest(Boolean optimizeMODI, Boolean optimizeSteppingStone) {
         clearSolution();
-        closeProblem();
+        balanceProblem();
         int currentDemand = 0;
         int currentSupply = 0;
         Double alloted = 0.0;
@@ -137,8 +139,6 @@ public class TransportProblem {
     }
 
     public void initialLeastCost(Boolean optimizeMODI, Boolean optimizeSteppingStone) {
-
-
         if (optimizeMODI) {
             optimizeMODI();
         }

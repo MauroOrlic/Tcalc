@@ -10,4 +10,10 @@
     <string name="solution_optimizationText">Solution optimization</string>
     <string name="build_table">Build table</string>
     <string name="solve">Solve</string>
+    <string-array name="initialSolutionMethods">
+        <item>North-West corner</item>
+        <item>Least cost</item>
+        <item>Vogel</item>
+    </string-array>
+
 </resources>

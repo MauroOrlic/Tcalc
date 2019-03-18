@@ -1,48 +1,44 @@
 package com.mauroorlic.tcalc;
 
-import android.graphics.Color;
-import android.graphics.drawable.Drawable;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.text.InputType;
-import android.util.Log;
-import android.util.TypedValue;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TableLayout;
-import android.widget.TableRow;
 import android.widget.Toast;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
 
-    TableLayout tableLayout;
+    TableLayout inputTableLayout;
     TableLayout outputTableLayout;
     InputTable inputTable;
     TransportProblem transportProblem;
     int supply, demand;
-
-    final int DEMAND_MAX = 99;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        tableLayout = findViewById(R.id.input_grid);
+        inputTableLayout = findViewById(R.id.input_grid);
         outputTableLayout = findViewById(R.id.output_grid);
+        final CheckBox usingMODI = findViewById(R.id.usingMODI);
+        final CheckBox usingSteppingStone = findViewById(R.id.usingSteppingStone);
 
+        final Spinner initialSolutionMethod = findViewById(R.id.initialSolutionMethod);
+        final ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.initialSolutionMethods, R.layout.support_simple_spinner_dropdown_item);
+        initialSolutionMethod.setAdapter(adapter);
 
         final EditText supplyInput = findViewById(R.id.supplyInput);
         final EditText demandInput = findViewById(R.id.demandInput);
         Button buildTableButton = findViewById(R.id.build_table);
+
+
         buildTableButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -53,12 +49,7 @@ public class MainActivity extends AppCompatActivity {
                     Toast.makeText(MainActivity.this, "You didn't enter", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                if(demand > DEMAND_MAX){
-                    Toast.makeText(MainActivity.this, "Too much demand", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                //generateGrid(supply, demand);
-                inputTable = new InputTable(tableLayout,demand, supply);
+                inputTable = new InputTable(inputTableLayout,demand, supply);
                 inputTable.buildTable();
             }
         });
@@ -67,107 +58,32 @@ public class MainActivity extends AppCompatActivity {
         calculateButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                transportProblem = new TransportProblem(inputTable.getTransportProblem());
+                String selectedInitialMethod = initialSolutionMethod.getSelectedItem().toString();
+
+                if(selectedInitialMethod.contentEquals(adapter.getItem(0))){
+                    Toast.makeText(MainActivity.this, "NW", Toast.LENGTH_SHORT).show();
+                    transportProblem.initialNorthWest(usingMODI.isChecked(), usingSteppingStone.isChecked());
+                }
+                else if(selectedInitialMethod.contentEquals(adapter.getItem(1))){
+                    Toast.makeText(MainActivity.this, "LC", Toast.LENGTH_SHORT).show();
+                    transportProblem.initialLeastCost(usingMODI.isChecked(), usingSteppingStone.isChecked());
+                }
+                else if(selectedInitialMethod.contentEquals(adapter.getItem(3))){
+                    Toast.makeText(MainActivity.this, "VG", Toast.LENGTH_SHORT).show();
+                    transportProblem.initialVogel(usingMODI.isChecked(), usingSteppingStone.isChecked());
+                }
+                OutputTable outputTable = new OutputTable(outputTableLayout, transportProblem);
+                outputTable.buildTable();
+                transportProblem = inputTable.getTransportProblem();
+
+                /*
                 OutputTable outputTable = new OutputTable(outputTableLayout, inputTable.getTransportProblem());
                 outputTable.buildTable();
                 transportProblem = inputTable.getTransportProblem();
+                */
             }
         });
 
     }
-/*
-    void generateGrid(int supply, int demand){
-
-        tableLayout.removeAllViews();
-        costTable.clear();
-
-        for(int i=0; i<supply; i++){
-            TableRow tableRow = new TableRow(this);
-            tableLayout.addView(tableRow);
-            tableRow.setLayoutParams(new TableRow.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-
-            for(int j=0; j<demand; j++){
-                EditText editText = createInputCell();
-
-                tableRow.addView(editText);
-                costTable.add(editText);
-            }
-
-            EditText editText = createInputCell();
-            tableRow.addView(editText);
-            supplyTable.add(editText);
-        }
-
-        TableRow tableRow = new TableRow(this);
-        tableLayout.addView(tableRow);
-        tableRow.setLayoutParams(new TableRow.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-
-        for(int i=0; i<demand; i++){
-            EditText editText = createInputCell();
-            tableRow.addView(editText);
-            demandTable.add(editText);
-        }
-
-        EditText editText = createEmptyCell();
-        tableRow.addView(editText);
-
-        //View v = (LayoutInflater.from(this).inflate(R.layout.activity_main, tableLayout, false));
-        //v.findViewById(R.id.)
-    }
-
-    private EditText createInputCell(){
-        EditText editText = new EditText(this);
-        int px = toPx(CELL_WIDTH);
-        editText.setWidth(px);
-        editText.setHeight(px);
-        editText.setBackground(ContextCompat.getDrawable(this, R.drawable.table_border));
-        editText.setInputType(InputType.TYPE_CLASS_NUMBER);
-
-        return editText;
-    }
-
-    private EditText createEmptyCell(){
-        EditText editText = new EditText(this);
-        int px = toPx(CELL_WIDTH);
-        editText.setWidth(px);
-        editText.setHeight(px);
-        editText.setInputType(InputType.TYPE_CLASS_NUMBER);
-        editText.setEnabled(false);
-        editText.setVisibility(View.INVISIBLE);
-
-        return editText;
-    }
-
-    private int toPx(int dp){
-        return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, getResources().getDisplayMetrics());
-    }
-
-    void transform(){
-        ArrayList<ArrayList<Double>> costTableList = new ArrayList<>();
-        ArrayList<Double> supplyList = new ArrayList<>();
-        ArrayList<Double> demandList = new ArrayList<>();
-
-
-        for(int i=0; i<supply; i++){
-            costTableList.add(new ArrayList<Double>());
-            for(int j=0; j<demand; j++){
-                //TODO: Try catch stuff
-                costTableList.get(i).add(Double.parseDouble(costTable.get(i*demand + j).getText().toString()));
-            }
-        }
-
-        for(int i=0; i<supplyTable.size(); i++){
-            //TODO: Pokusaj, uhvati
-            supplyList.add(Double.parseDouble(supplyTable.get(i).getText().toString()));
-        }
-
-        for(int i=0; i<demandTable.size(); i++){
-            //TODO: Povuci potegni
-            demandList.add(Double.parseDouble(demandTable.get(i).getText().toString()));
-        }
-
-        TransportProblem transportProblem = new TransportProblem(demandList, supplyList, costTableList);
-        transportProblem.initialNorthWest(false, false);
-        Log.d(TAG, "transform: " + transportProblem.costTable);
-    }
-    */
 }
