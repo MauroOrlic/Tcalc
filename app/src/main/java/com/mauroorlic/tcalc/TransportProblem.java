@@ -172,20 +172,41 @@ public class TransportProblem {
     public void optimizeSteppingStone() {
 
     }
-    private List<CostCell> getClosedPath(CostCell s){
-        List<CostCell> path = new ArrayList<CostCell>();
-
+    private List<CostCell> getClosedPath(CostCell startingCostCell){
+        List<CostCell> path = matrixToList();
+        //TODO implement the rest of the damn method
         return  path;
     }
-    private List<CostCell> getNeighbors(CostCell c, ArrayList<CostCell> list){
-        List<CostCell> neighbors = new ArrayList<CostCell>();
+    private List<CostCell> matrixToList(){
+        List<CostCell> costList = new ArrayList<CostCell>();
+        for(ArrayList<CostCell> row :costTable){
+            costList.addAll(row);
+        }
+        return costList;
+    }
+    private CostCell[] getNeighbors(CostCell startingCostCell, ArrayList<CostCell> list){
+        CostCell[] neighbors = new CostCell[2];
+        for(CostCell currentCostCell : list){
+            //TODO implement object Comparator or ??operator overloading??
+            if(currentCostCell != startingCostCell){
+                if(currentCostCell.positionRow.equals(startingCostCell.positionRow) && neighbors[0]==null){
+                    neighbors[0] = currentCostCell;
+                }
+                else if(currentCostCell.positionColumn.equals(startingCostCell.positionColumn)&& neighbors[1]==null){
+                    neighbors[1]=currentCostCell;
+                }
+                if(neighbors[0]!=null && neighbors[1]!= null){
+                    break;
+                }
+            }
+        }
 
         return neighbors;
     }
     private void fixDegenerateCase(){
         final Double epsilon = Double.MIN_VALUE;
 
-        Integer allotedCellCount = 0;
+        int allotedCellCount = 0;
         for(ArrayList<CostCell> row : costTable){
             for(CostCell costCell : row){
                 if(costCell.alloted==0.0){
