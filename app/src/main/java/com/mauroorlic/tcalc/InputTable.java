@@ -18,11 +18,13 @@ public class InputTable {
     List<EditText> supplyInputCells = new ArrayList<>();
     int numOfDemands;
     int numOfSupplies;
+    Integer currentInputCellID;
     public InputTable(TableLayout inputTableReference, int demands, int supplies) {
         this.inputTableReference = inputTableReference;
         this.numOfDemands = demands;
         this.numOfSupplies = supplies;
         this.inputTableReference.removeAllViews();
+        this.currentInputCellID = 567044;
     }
     public void buildTable(){
         LayoutInflater inflater = LayoutInflater.from(inputTableReference.getContext());
@@ -37,22 +39,23 @@ public class InputTable {
                 EditText a = v.findViewById(R.id.inflateable_inputCell);
                 //TODO implement function that creates an edittext and links focuses
                 inputCells.get(i).add(a);
-                inputCells.get(i).get(j).setId(102000 + i*10 + j);
                 inputCells.get(i).get(j).setImeOptions(EditorInfo.IME_ACTION_NEXT);
+                inputCells.get(i).get(j).setId(currentInputCellID);
                 if(i==0 && j==0){
                     inputCells.get(i).get(j).requestFocus();
                 }
-                else if(j==0){
-                    inputCells.get(i-1).get(numOfDemands-1).setNextFocusForwardId(inputCells.get(i).get(j).getId());
-                }
                 else {
-                    inputCells.get(i).get(j - 1).setNextFocusForwardId(inputCells.get(i).get(j).getId());
+                    inputCells.get(i).get(j).setNextFocusForwardId(++currentInputCellID);
                 }
+
             }
             View v = inflater.inflate(R.layout.input_cell, tableRow, false);
             tableRow.addView(v);
             EditText b = v.findViewById(R.id.inflateable_inputCell);
             supplyInputCells.add( (EditText) v.findViewById(R.id.inflateable_inputCell));
+            supplyInputCells.get(i).setImeOptions(EditorInfo.IME_ACTION_NEXT);
+            supplyInputCells.get(i).setId(currentInputCellID);
+            supplyInputCells.get(i).setNextFocusForwardId(++currentInputCellID);
         }
         TableRow tableRow = new TableRow(inputTableReference.getContext());
         inputTableReference.addView(tableRow);
@@ -62,6 +65,12 @@ public class InputTable {
             View c = inflater.inflate(R.layout.input_cell, tableRow, false);
             tableRow.addView(c);
             demandInputCells.add((EditText) c.findViewById(R.id.inflateable_inputCell));
+            demandInputCells.get(i).setId(currentInputCellID);
+            if(i<numOfDemands-1){
+                demandInputCells.get(i).setImeOptions(EditorInfo.IME_ACTION_NEXT);
+                demandInputCells.get(i).setNextFocusForwardId(++currentInputCellID);
+            }
+
         }
         View c = inflater.inflate(R.layout.input_cell, tableRow, false);
         tableRow.addView(c);
@@ -130,4 +139,5 @@ public class InputTable {
 
         return new TransportProblem(demandArray, supplyArray, costTable);
     }
+
 }
