@@ -1,11 +1,13 @@
 package com.mauroorlic.tcalc;
 
+import android.util.Log;
 import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class TransportProblem {
+    private static final String TAG = "TransportProblem";
     int numOfDemands;
     int numOfSupplies;
     List<ResourceCell> demand = new ArrayList<>();
@@ -138,6 +140,7 @@ public class TransportProblem {
             optimizeMODI();
         }
         if (optimizeSteppingStone) {
+            Log.d("activated", "optimizeSteppingStone launched");
             optimizeSteppingStone();
         }
 
@@ -170,24 +173,94 @@ public class TransportProblem {
     }
 
     public void optimizeSteppingStone() {
+        double maxReduction = 0;
+        CostCell[] move = null;
+        CostCell leaving = null;
+        fixDegenerateCase();
 
+        for(ArrayList<CostCell> row : costTable){
+            for(CostCell costCell : row){
+                if(costCell.alloted !=0.0){
+                    continue;
+                }
+                CostCell trial = new CostCell(costCell.cost,0.0,costCell.positionRow, costCell.positionColumn);
+                CostCell[] path = getClosedPath(trial);
+
+                double reduction = 0;
+                double lowestQuanity = Integer.MAX_VALUE;
+                CostCell leavingCandidate = null;
+
+                boolean plus = true;
+
+                for(CostCell s : path){
+                    if(plus) {
+                        reduction += s.cost;
+                    }
+                    else{
+                        reduction -= s.cost;
+                        if(s.alloted<lowestQuanity){
+                            leavingCandidate = s;
+                            lowestQuanity = s.alloted;
+                        }
+                    }
+                    plus = !plus;
+                }
+                if(reduction<maxReduction){
+                    move = path;
+                    leaving = leavingCandidate;
+                    maxReduction = reduction;
+                }
+            }
+        }
+        if(move!=null){
+            double q = leaving.alloted;
+            boolean plus = true;
+            for(CostCell s : move){
+                s.alloted+= plus ? q: -q;
+                //costTable.get(s.positionRow).set(s.positionColumn, s.alloted == 0 ? new CostCell(0.0,0.0, s.positionRow, s.positionColumn):s);
+                costTable.get(s.positionRow).get(s.positionColumn).alloted = s.alloted;
+                costTable.get(s.positionRow).get(s.positionColumn).cost = s.cost;
+                plus = !plus;
+            }
+            optimizeSteppingStone();
+        }
     }
-    private List<CostCell> getClosedPath(CostCell startingCostCell){
-        List<CostCell> path = matrixToList();
-        //TODO implement the rest of the damn method
-        return  path;
+    private CostCell[] getClosedPath(CostCell startingCostCell){
+        final List<CostCell> path = matrixToList();
+        path.add(0, startingCostCell);
+        //(path.removeIf(e -> {Shipment[] nbrs = getNeighbors(e, path);
+        while (path.removeIf(e -> {
+            CostCell[] neighbors = getNeighbors(e,path);
+            return  neighbors[0] == null || neighbors[1] ==null;
+        }));
+
+        CostCell[] stones = path.toArray(new CostCell[path.size()]);
+        CostCell previous = startingCostCell;
+        for(int i=0; i< stones.length;i++){
+            //Log.d(TAG, "getClosedPath: "+i+ "|"+previous);
+            stones[i] = previous;
+            previous = getNeighbors(previous,path)[i % 2];
+        }
+        return  stones;
     }
     private List<CostCell> matrixToList(){
-        List<CostCell> costList = new ArrayList<CostCell>();
+        List<CostCell> costList = new ArrayList<>();
         for(ArrayList<CostCell> row :costTable){
-            costList.addAll(row);
+            for(CostCell costCell : row){
+                if(costCell.alloted!=0.0){
+                    costList.add(costCell);
+                }
+            }
         }
         return costList;
     }
-    private CostCell[] getNeighbors(CostCell startingCostCell, ArrayList<CostCell> list){
+    private CostCell[] getNeighbors(CostCell startingCostCell, List<CostCell> list){
+        //Log.d(TAG, "getNeighbors: "+"||"+startingCostCell+list.size());
         CostCell[] neighbors = new CostCell[2];
         for(CostCell currentCostCell : list){
             //TODO implement object Comparator or ??operator overloading??
+            /*if(currentCostCell.cost != startingCostCell.cost && currentCostCell.alloted != startingCostCell.alloted && currentCostCell.positionColumn != startingCostCell.positionColumn && currentCostCell.positionRow != startingCostCell.positionRow){
+              */
             if(currentCostCell != startingCostCell){
                 if(currentCostCell.positionRow.equals(startingCostCell.positionRow) && neighbors[0]==null){
                     neighbors[0] = currentCostCell;
@@ -209,7 +282,7 @@ public class TransportProblem {
         int allotedCellCount = 0;
         for(ArrayList<CostCell> row : costTable){
             for(CostCell costCell : row){
-                if(costCell.alloted==0.0){
+                if(costCell.alloted!=0.0){
                     allotedCellCount++;
                 }
             }
@@ -217,7 +290,7 @@ public class TransportProblem {
         if(allotedCellCount < numOfSupplies+numOfDemands-1){
             for(List<CostCell> row : costTable){
                 for(CostCell costCell : row){
-                    if(costCell.alloted==0.0 && getClosedPath(costCell).size()==0){
+                    if(costCell.alloted==0.0 && getClosedPath(costCell).length==0){
                         costCell.alloted = epsilon;
                         //TODO check if the return bellow actually messes up the solution
                         return;
