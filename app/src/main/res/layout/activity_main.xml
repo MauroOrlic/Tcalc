@@ -26,6 +26,7 @@
         android:ems="10"
         android:inputType="number"
         android:text="@string/supplyInput"
+        android:hint="3"
         app:layout_constraintBottom_toBottomOf="@+id/supplyText"
         app:layout_constraintStart_toEndOf="@+id/supplyText" />
 
@@ -49,6 +50,7 @@
         android:ems="10"
         android:inputType="number"
         android:text="@string/demandInput"
+        android:hint="3"
         app:layout_constraintBottom_toBottomOf="@+id/demandText"
         app:layout_constraintStart_toEndOf="@+id/demandText"
         android:autofillHints="" />

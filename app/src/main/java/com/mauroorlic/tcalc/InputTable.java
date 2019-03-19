@@ -79,26 +79,47 @@ public class InputTable {
     }
     public List<List<Double>> getCostTable(){
         List<List<Double>> costTable = new ArrayList<>();
+        String input;
 
         for(int i=0; i< numOfSupplies; i++){
             costTable.add(new ArrayList<Double>());
             for(int j=0; j< numOfDemands; j++){
-                costTable.get(i).add(Double.parseDouble(inputCells.get(i).get(j).getText().toString()));
+                input = inputCells.get(i).get(j).getText().toString();
+                if(!input.equals("")) {
+                    costTable.get(i).add(Double.parseDouble(input));
+                }
+                else{
+                    costTable.get(i).add(0.0);
+                }
             }
         }
         return costTable;
     }
     public List<Double> getSupplyArray(){
         List<Double> supplyArray = new ArrayList<>();
+        String input;
         for(int i=0;i<numOfSupplies;i++){
-            supplyArray.add(Double.parseDouble(supplyInputCells.get(i).getText().toString()));
+            input = supplyInputCells.get(i).getText().toString();
+            if(!input.equals("")) {
+                supplyArray.add(Double.parseDouble(input));
+            }
+            else {
+                supplyArray.add(0.0);
+            }
         }
         return supplyArray;
     }
     public List<Double> getDemandArray(){
         List<Double> demandArray = new ArrayList<>();
+        String input;
         for(int i=0;i<numOfDemands;i++){
-            demandArray.add(Double.parseDouble(demandInputCells.get(i).getText().toString()));
+            input = demandInputCells.get(i).getText().toString();
+            if(!input.equals("")) {
+                demandArray.add(Double.parseDouble(input));
+            }
+            else{
+                demandArray.add(0.0);
+            }
         }
         return demandArray;
     }
