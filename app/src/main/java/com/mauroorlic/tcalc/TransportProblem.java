@@ -221,7 +221,6 @@ public class TransportProblem {
                 }
             }
         }
-        //STACK OVERFLOW BELLOW
         //search for CostCell which can reduce the total transport cost
         boolean breakOut = false;
 
