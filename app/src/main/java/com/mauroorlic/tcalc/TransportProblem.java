@@ -84,8 +84,7 @@ public class TransportProblem {
 
             costTable.add(new ArrayList<CostCell>());
             for (int i = 0; i < supply.size(); i++) {
-                costTable.get(costTable.size() - 1).add(new CostCell(0.
-                        0,costTable.size()-1,i));
+                costTable.get(costTable.size() - 1).add(new CostCell(0.0,costTable.size()-1,i));
             }
 
         } else if (totalDemand < totalSupply) {
@@ -173,7 +172,98 @@ public class TransportProblem {
     //takes an empty cell, scans for all occupied cells on same row, for each cell found, scan for other occupied cells in same column, for each cell found, scan for other occupied cells in same row... if a scanned cell is initial, close loop
     //always check if selected cells are already in the list, no more than 2 selected cells in same row/column
     private void optimizeMODI() {
+        fixDegenerateCase();
+        Double[] u = new Double[numOfSupplies];
+        Double[] v = new Double[numOfDemands];
+        Double[][] costMatrix = new Double[numOfSupplies][numOfDemands];
+        Double[][] costMatrixInverted = new Double[numOfSupplies][numOfDemands];
+        //reading costs of alloted cells
+        for(int i=0; i<numOfSupplies;i++){
+            for(int j=0; j<numOfDemands;j++) {
+                if (costTable.get(i).get(j).alloted!=0.0) {
+                    costMatrix[i][j] = costTable.get(i).get(j).cost;
+                }
+            }
+        }
 
+        //determining u_i and v_i array values
+        List<Boolean> check = new ArrayList<>();
+
+        u[0] = 0.0;
+        boolean tryAgain;
+        do {
+            tryAgain = false;
+
+            for (int i = 0; i < u.length; i++) {
+                for (int j = 0; j < v.length; j++) {
+                    if (costMatrix[i][j] != null) {
+                            if (u[i] == null && v[j] != null) {
+                                u[i] = costMatrix[i][j] - v[j];
+
+                            } else if (v[j] == null && u[i] != null) {
+                                v[j] = costMatrix[i][j] - u[i];
+                            }else if( v[j] == null && u[i]==null){
+                                tryAgain = true;
+                            }
+
+
+                    }
+                }
+            }
+        }while (tryAgain);
+
+        //building inverted cost matrix
+        for(int i=0;i<u.length;i++){
+            for(int j=0; j<v.length;j++){
+                if(costMatrix[i][j]==null){
+
+                    costMatrixInverted[i][j] = costTable.get(i).get(j).cost -(v[j] + u[i]);
+                }
+            }
+        }
+        //STACK OVERFLOW BELLOW
+        //search for CostCell which can reduce the total transport cost
+        boolean breakOut = false;
+
+        for(int i=0; i<u.length;i++){
+            for(int j=0;j<v.length; j++){
+                if(costMatrixInverted[i][j] != null && costMatrixInverted[i][j]<0.0){
+                    //stepping stone rotate
+                    CostCell newSolutionCell = costTable.get(i).get(j);
+                    CostCell[] path = getClosedPath(newSolutionCell);
+
+                    double lowestQuantity = Integer.MAX_VALUE;
+                    boolean plus = true;
+
+                    for(CostCell currentCostCell : path){
+                        if(!plus){
+                            if(currentCostCell.alloted<lowestQuantity){
+                                lowestQuantity=currentCostCell.alloted;
+                            }
+                        }
+                        plus = !plus;
+                    }
+                    plus = true;
+
+                    for(CostCell s : path){
+                        if(plus){
+                            s.alloted+=lowestQuantity;
+                        }
+                        else{
+                            s.alloted-=lowestQuantity;
+                        }
+                        plus = !plus;
+                    }
+                    optimizeMODI();
+                    breakOut = true;
+                }
+
+                if(breakOut){break;}
+                //if(i==u.length-1 && j==v.length-1){return;}
+            }
+            if(breakOut){break;}
+        }
+        //optimizeMODI();
     }
 
     public void optimizeSteppingStone() {

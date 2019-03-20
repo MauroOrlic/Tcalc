@@ -58,9 +58,9 @@ public class MainActivity extends AppCompatActivity {
         calculateButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                transportProblem = new TransportProblem(inputTable.getTransportProblem());
+                //transportProblem = new TransportProblem(inputTable.getTransportProblem());
                 //TODO uncomment above and comment bellow line to make input actually work
-                //transportProblem = inputTable.generateAtozmathStock();
+                transportProblem = inputTable.generateAtozmathStock();
 
                 String selectedInitialMethod = initialSolutionMethod.getSelectedItem().toString();
 
