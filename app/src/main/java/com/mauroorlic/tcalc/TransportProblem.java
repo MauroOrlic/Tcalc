@@ -84,15 +84,19 @@ public class TransportProblem {
 
             costTable.add(new ArrayList<CostCell>());
             for (int i = 0; i < supply.size(); i++) {
-                costTable.get(costTable.size() - 1).add(new CostCell(0.0));
+                costTable.get(costTable.size() - 1).add(new CostCell(0.
+                        0,costTable.size()-1,i));
             }
 
         } else if (totalDemand < totalSupply) {
             numOfDemands += 1;
             demand.add(new ResourceCell(totalSupply - totalDemand));
 
-            for (ArrayList<CostCell> row : costTable) {
+            /*for (ArrayList<CostCell> row : costTable) {
                 row.add(new CostCell(0.0));
+            }*/
+            for(int i=0; i< numOfSupplies;i++){
+                costTable.get(i).add(new CostCell(0.0, i, numOfDemands-1));
             }
         }
 
