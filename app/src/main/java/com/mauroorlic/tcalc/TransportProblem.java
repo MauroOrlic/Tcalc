@@ -169,8 +169,6 @@ public class TransportProblem {
         }
     }
 
-    //takes an empty cell, scans for all occupied cells on same row, for each cell found, scan for other occupied cells in same column, for each cell found, scan for other occupied cells in same row... if a scanned cell is initial, close loop
-    //always check if selected cells are already in the list, no more than 2 selected cells in same row/column
     private void optimizeMODI() {
         fixDegenerateCase();
         Double[] u = new Double[numOfSupplies];
@@ -186,7 +184,6 @@ public class TransportProblem {
             }
         }
 
-        //determining u_i and v_i array values
         List<Boolean> check = new ArrayList<>();
 
         u[0] = 0.0;
