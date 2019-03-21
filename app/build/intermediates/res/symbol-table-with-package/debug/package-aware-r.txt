@@ -709,6 +709,7 @@ id demandText
 id dimensions
 id direct
 id disableHome
+id displayTotalCost
 id edit_query
 id end
 id end_padder

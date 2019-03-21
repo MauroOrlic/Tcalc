@@ -9,7 +9,10 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TableLayout;
+import android.widget.TextView;
 import android.widget.Toast;
+
+import java.text.DecimalFormat;
 
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
@@ -25,6 +28,10 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        DecimalFormat format = new DecimalFormat();
+        format.setDecimalSeparatorAlwaysShown(false);
+
+
         inputTableLayout = findViewById(R.id.input_grid);
         outputTableLayout = findViewById(R.id.output_grid);
         final CheckBox usingMODI = findViewById(R.id.usingMODI);
@@ -37,6 +44,7 @@ public class MainActivity extends AppCompatActivity {
         final EditText supplyInput = findViewById(R.id.supplyInput);
         final EditText demandInput = findViewById(R.id.demandInput);
         Button buildTableButton = findViewById(R.id.build_table);
+        final TextView displayTotalCost = findViewById(R.id.displayTotalCost);
 
 
         buildTableButton.setOnClickListener(new View.OnClickListener() {
@@ -58,9 +66,9 @@ public class MainActivity extends AppCompatActivity {
         calculateButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //transportProblem = new TransportProblem(inputTable.getTransportProblem());
+                transportProblem = new TransportProblem(inputTable.getTransportProblem());
                 //TODO uncomment above and comment bellow line to make input actually work
-                transportProblem = inputTable.generateAtozmathStock();
+                //transportProblem = inputTable.generateAtozmathStock();
 
                 String selectedInitialMethod = initialSolutionMethod.getSelectedItem().toString();
 
@@ -75,7 +83,10 @@ public class MainActivity extends AppCompatActivity {
                 }
                 OutputTable outputTable = new OutputTable(outputTableLayout, transportProblem);
                 outputTable.buildTable();
-                transportProblem = inputTable.getTransportProblem();
+
+                displayTotalCost.setText(("Minimum total cost = "+format.format(transportProblem.totalCost)));
+                displayTotalCost.requestFocus();
+                //transportProblem = inputTable.getTransportProblem();
 
                 /*
                 OutputTable outputTable = new OutputTable(outputTableLayout, inputTable.getTransportProblem());

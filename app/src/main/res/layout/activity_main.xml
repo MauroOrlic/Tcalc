@@ -154,6 +154,18 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/input_grid" />
+                <TextView
+                    android:id="@+id/displayTotalCost"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="32dp"
+                    android:textSize="22sp"
+                    android:textStyle="bold"
+                    android:textColor="#449944"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/output_grid"
+                    android:text=""/>
             </android.support.constraint.ConstraintLayout>
         </HorizontalScrollView>
     </ScrollView>

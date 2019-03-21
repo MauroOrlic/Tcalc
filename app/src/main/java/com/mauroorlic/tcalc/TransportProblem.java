@@ -16,6 +16,7 @@ public class TransportProblem {
     List<ResourceCell> demand = new ArrayList<>();
     List<ResourceCell> supply = new ArrayList<>();
     List<ArrayList<CostCell>> costTable = new ArrayList<>();
+    Double totalCost;
 
     public TransportProblem(List<Double> demand, List<Double> supply, List<List<Double>> costTable) {
         //entering raw demands into demand arraylist
@@ -42,7 +43,7 @@ public class TransportProblem {
         numOfDemands = this.demand.size();
         numOfSupplies = this.supply.size();
 
-        balanceProblem();
+        this.totalCost = 0.0;
     }
     public TransportProblem(TransportProblem transportProblem){
         this.numOfDemands = transportProblem.numOfDemands;
@@ -50,6 +51,7 @@ public class TransportProblem {
         this.demand = transportProblem.demand;
         this.supply = transportProblem.supply;
         this.costTable = transportProblem.costTable;
+        this.totalCost = 0.0;
     }
 
     public int getNumOfDemands() {
@@ -60,14 +62,14 @@ public class TransportProblem {
         return numOfSupplies;
     }
 
-    public Double getTotalCost() {
+    public void getTotalCost() {
         double totalCost = 0.0;
         for (ArrayList<CostCell> row : costTable) {
             for (CostCell e : row) {
                 totalCost += e.cost * e.alloted;
             }
         }
-        return totalCost;
+        this.totalCost = totalCost;
     }
 
     public void balanceProblem() {
@@ -149,14 +151,38 @@ public class TransportProblem {
             Log.d("activated", "optimizeSteppingStone launched");
             optimizeSteppingStone();
         }
-
+        getTotalCost();
     }
 
     public void initialLeastCost(Boolean optimizeMODI, Boolean optimizeSteppingStone) {
         clearSolution();
         balanceProblem();
 
-        List<CostCell> costCellList = matrixToList();
+        List<CostCell> costCellList = new ArrayList<>();
+        for(ArrayList<CostCell> row : costTable){
+            costCellList.addAll(row);
+        }
+        Comparator<CostCell> compareByCost = (CostCell o1, CostCell o2)-> {
+            int difference = o1.cost.compareTo(o2.cost);
+            if(difference==0){
+                Double o1MaxCapacity = Math.min(supply.get(o1.positionRow).remaining, demand.get(o1.positionColumn).remaining);
+                Double o2MaxCapacity = Math.min(supply.get(o2.positionRow).remaining, demand.get(o2.positionColumn).remaining);
+                difference = -o1MaxCapacity.compareTo(o2MaxCapacity);
+                if(difference==0){
+                    Double o1RemainingSupply = supply.get(o1.positionRow).remaining - o1MaxCapacity;
+                    Double o2RemainingSupply = supply.get(o2.positionRow).remaining - o2MaxCapacity;
+                    difference = -o1RemainingSupply.compareTo(o2RemainingSupply);
+                    if(difference==0) {
+                        difference = o1.positionRow.compareTo(o2.positionRow);
+                        if (difference == 0) {
+                            difference = o1.positionColumn.compareTo(o2.positionColumn);
+                        }
+                    }
+                }
+            }
+            return difference;
+        };
+        costCellList.sort(compareByCost);
         //TODO implement some sort of sorting algorithm for costCellList by cost. get it? some SORT of algorithm? :D
         Double alloted = 0.0;
 
@@ -169,6 +195,7 @@ public class TransportProblem {
                     demand.get(costCell.positionColumn).remaining -=alloted;
                 }
                 costCellList.remove(0);
+                costCellList.sort(compareByCost);
             }
 
 
@@ -178,6 +205,7 @@ public class TransportProblem {
         if (optimizeSteppingStone) {
             optimizeSteppingStone();
         }
+        getTotalCost();
     }
 
     public void initialVogel(Boolean optimizeMODI, Boolean optimizeSteppingStone) {
@@ -189,6 +217,7 @@ public class TransportProblem {
         if (optimizeSteppingStone) {
             optimizeSteppingStone();
         }
+        getTotalCost();
     }
 
     private void optimizeMODI() {
@@ -404,7 +433,6 @@ public class TransportProblem {
                 for(CostCell costCell : row){
                     if(costCell.alloted==0.0 && getClosedPath(costCell).length==0){
                         costCell.alloted = epsilon;
-                        //TODO check if the return bellow actually messes up the solution
                         return;
                     }
                 }
