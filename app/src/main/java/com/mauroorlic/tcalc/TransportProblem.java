@@ -4,6 +4,9 @@ import android.util.Log;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Iterator;
 import java.util.List;
 
 public class TransportProblem {
@@ -150,6 +153,25 @@ public class TransportProblem {
     }
 
     public void initialLeastCost(Boolean optimizeMODI, Boolean optimizeSteppingStone) {
+        clearSolution();
+        balanceProblem();
+
+        List<CostCell> costCellList = matrixToList();
+        //TODO implement some sort of sorting algorithm for costCellList by cost. get it? some SORT of algorithm? :D
+        Double alloted = 0.0;
+
+            while(costCellList.size()!=0){
+                CostCell costCell = costCellList.get(0);
+                if(supply.get(costCell.positionRow).remaining!=0.0 && demand.get(costCell.positionColumn).remaining!=0.0){
+                    alloted = Math.min(supply.get(costCell.positionRow).remaining, demand.get(costCell.positionColumn).remaining);
+                    costCell.alloted = alloted;
+                    supply.get(costCell.positionRow).remaining -=alloted;
+                    demand.get(costCell.positionColumn).remaining -=alloted;
+                }
+                costCellList.remove(0);
+            }
+
+
         if (optimizeMODI) {
             optimizeMODI();
         }
