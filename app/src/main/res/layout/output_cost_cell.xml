@@ -21,6 +21,7 @@
         app:layout_constraintStart_toStartOf="parent"
         />
     <TextView
+        android:textColor="#222"
         android:id="@+id/inflateable_outputAlloted"
         android:layout_marginEnd="4dp"
         android:layout_marginBottom="4dp"

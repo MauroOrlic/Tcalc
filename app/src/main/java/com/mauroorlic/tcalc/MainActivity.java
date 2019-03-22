@@ -1,8 +1,11 @@
 package com.mauroorlic.tcalc;
 
+import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -39,7 +42,10 @@ public class MainActivity extends AppCompatActivity {
 
         final Spinner initialSolutionMethod = findViewById(R.id.initialSolutionMethod);
         final ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.initialSolutionMethods, R.layout.support_simple_spinner_dropdown_item);
-        initialSolutionMethod.setAdapter(adapter);
+        initialSolutionMethod.setAdapter(adapter);/*
+        for(int i=0; i< initialSolutionMethod.getChildCount();i++){
+            ((EditText) initialSolutionMethod.getChildAt(i)).setTextColor(Color.rgb(255,255,255));
+        }*/
 
         final EditText supplyInput = findViewById(R.id.supplyInput);
         final EditText demandInput = findViewById(R.id.demandInput);
@@ -85,14 +91,8 @@ public class MainActivity extends AppCompatActivity {
                 outputTable.buildTable();
 
                 displayTotalCost.setText(("Minimum total cost = "+format.format(transportProblem.totalCost)));
+                displayTotalCost.setImeOptions(EditorInfo.IME_ACTION_NEXT);
                 displayTotalCost.requestFocus();
-                //transportProblem = inputTable.getTransportProblem();
-
-                /*
-                OutputTable outputTable = new OutputTable(outputTableLayout, inputTable.getTransportProblem());
-                outputTable.buildTable();
-                transportProblem = inputTable.getTransportProblem();
-                */
             }
         });
 

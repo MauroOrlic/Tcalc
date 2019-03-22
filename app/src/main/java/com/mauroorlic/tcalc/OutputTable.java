@@ -1,5 +1,6 @@
 package com.mauroorlic.tcalc;
 
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,10 +22,27 @@ public class OutputTable {
         DecimalFormat format = new DecimalFormat();
         format.setDecimalSeparatorAlwaysShown(false);
 
+        TableRow tableRow = new TableRow(outputTableReference.getContext());
+        tableRow.setLayoutParams(new TableRow.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+        outputTableReference.addView(tableRow);
         LayoutInflater inflater = LayoutInflater.from(outputTableReference.getContext());
+        View lineTag;
+        lineTag = inflater.inflate(R.layout.output_resource_cell, tableRow,false);
+        tableRow.addView(lineTag);
+        lineTag.setEnabled(false);
+        lineTag.setVisibility(View.INVISIBLE);
+        for(int i=0; i<transportProblem.numOfDemands;i++){
+            lineTag = inflater.inflate(R.layout.output_resource_cell, tableRow,false);
+            ((TextView)lineTag.findViewById(R.id.resourceAmount)).setText(Html.fromHtml(("D"+"<sub>"+(i+1)+"</sub>")));
+            tableRow.addView(lineTag);
+        }
+
         for(int i = 0; i<transportProblem.numOfSupplies;i++){
-            TableRow tableRow = new TableRow(outputTableReference.getContext());
+            tableRow = new TableRow(outputTableReference.getContext());
             outputTableReference.addView(tableRow);
+            lineTag = inflater.inflate(R.layout.output_resource_cell, tableRow,false);
+            ((TextView)lineTag.findViewById(R.id.resourceAmount)).setText(Html.fromHtml(("S"+"<sub>"+(i+1)+"</sub>")));
+            tableRow.addView(lineTag);
             tableRow.setLayoutParams(new TableRow.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
             for(int j=0;j<transportProblem.numOfDemands;j++) {
                 View v = inflater.inflate(R.layout.output_cost_cell, tableRow, false);
@@ -43,19 +61,24 @@ public class OutputTable {
             //TODO: Provjeri dal je tocno
             resourceAmount.setText(format.format(transportProblem.supply.get(i).total));
         }
-        TableRow tableRow = new TableRow(outputTableReference.getContext());
+        tableRow = new TableRow(outputTableReference.getContext());
         outputTableReference.addView(tableRow);
         tableRow.setLayoutParams(new TableRow.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
 
+        View c = inflater.inflate(R.layout.output_resource_cell, tableRow, false);
+        tableRow.addView(c);
+        c.setEnabled(false);
+        c.setVisibility(View.INVISIBLE);
+
         for(int i=0; i<transportProblem.numOfDemands; i++){
-            View c = inflater.inflate(R.layout.output_resource_cell, tableRow, false);
+            c = inflater.inflate(R.layout.output_resource_cell, tableRow, false);
             TextView resourceAmount = c.findViewById(R.id.resourceAmount);
             //TODO: Provjeri dal je tocno
             resourceAmount.setText(format.format(transportProblem.demand.get(i).total));
             tableRow.addView(c);
         }
         //TODO: Alternativno: umjesto input cell resource cell, ali mislim da su istih dimenzija pa je svejedno
-        View c = inflater.inflate(R.layout.output_resource_cell, tableRow, false);
+        c = inflater.inflate(R.layout.output_resource_cell, tableRow, false);
         tableRow.addView(c);
         c.setEnabled(false);
         c.setVisibility(View.INVISIBLE);

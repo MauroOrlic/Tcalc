@@ -1,5 +1,6 @@
 package com.mauroorlic.tcalc;
 
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -7,6 +8,7 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.TableLayout;
 import android.widget.TableRow;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,10 +30,27 @@ public class InputTable {
     }
     public void buildTable(){
         LayoutInflater inflater = LayoutInflater.from(inputTableReference.getContext());
+        TableRow tableRow = new TableRow(inputTableReference.getContext());
+        tableRow.setLayoutParams(new TableRow.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+        inputTableReference.addView(tableRow);
+        View lineTag;
+        lineTag = inflater.inflate(R.layout.output_resource_cell, tableRow,false);
+        tableRow.addView(lineTag);
+        lineTag.setEnabled(false);
+        lineTag.setVisibility(View.INVISIBLE);
+        for(int i=0; i<numOfDemands;i++){
+            lineTag = inflater.inflate(R.layout.output_resource_cell, tableRow,false);
+            ((TextView)lineTag.findViewById(R.id.resourceAmount)).setText(Html.fromHtml(("D"+"<sub>"+(i+1)+"</sub>")));
+            tableRow.addView(lineTag);
+        }
         for(int i = 0; i<numOfSupplies;i++){
             inputCells.add(new ArrayList<EditText>());
-            TableRow tableRow = new TableRow(inputTableReference.getContext());
+            tableRow = new TableRow(inputTableReference.getContext());
             inputTableReference.addView(tableRow);
+            lineTag = inflater.inflate(R.layout.output_resource_cell, tableRow,false);
+            ((TextView)lineTag.findViewById(R.id.resourceAmount)).setText(Html.fromHtml(("S"+"<sub>"+(i+1)+"</sub>")));
+            tableRow.addView(lineTag);
+
             tableRow.setLayoutParams(new TableRow.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
             for(int j=0;j<numOfDemands;j++) {
                 View v = inflater.inflate(R.layout.input_cell, tableRow, false);
@@ -57,12 +76,16 @@ public class InputTable {
             supplyInputCells.get(i).setId(currentInputCellID);
             supplyInputCells.get(i).setNextFocusForwardId(++currentInputCellID);
         }
-        TableRow tableRow = new TableRow(inputTableReference.getContext());
+        tableRow = new TableRow(inputTableReference.getContext());
         inputTableReference.addView(tableRow);
         tableRow.setLayoutParams(new TableRow.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
 
+        View c = inflater.inflate(R.layout.input_cell, tableRow, false);
+        tableRow.addView(c);
+        c.setEnabled(false);
+        c.setVisibility(View.INVISIBLE);
         for(int i=0; i<numOfDemands; i++){
-            View c = inflater.inflate(R.layout.input_cell, tableRow, false);
+            c = inflater.inflate(R.layout.input_cell, tableRow, false);
             tableRow.addView(c);
             demandInputCells.add((EditText) c.findViewById(R.id.inflateable_inputCell));
             demandInputCells.get(i).setId(currentInputCellID);
@@ -72,7 +95,7 @@ public class InputTable {
             }
 
         }
-        View c = inflater.inflate(R.layout.input_cell, tableRow, false);
+        c = inflater.inflate(R.layout.input_cell, tableRow, false);
         tableRow.addView(c);
         c.setEnabled(false);
         c.setVisibility(View.INVISIBLE);

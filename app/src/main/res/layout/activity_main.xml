@@ -4,9 +4,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#323232"
     tools:context=".MainActivity">
 
     <TextView
+        android:textColor="#FFFFFF"
         android:id="@+id/supplyText"
         android:layout_width="wrap_content"
         android:layout_height="48dp"
@@ -18,20 +20,26 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
+        android:background="#222"
+        android:padding="4dp"
+        android:textColor="#FFFFFF"
+        android:textColorHint="#a9a9a9"
         android:id="@+id/supplyInput"
         android:layout_width="32dp"
-        android:layout_height="48dp"
+        android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:autofillHints="Number of supplies"
         android:ems="10"
         android:inputType="number"
         android:text="@string/supplyInput"
         android:hint="3"
+        app:layout_constraintTop_toTopOf="@id/supplyText"
         app:layout_constraintBottom_toBottomOf="@+id/supplyText"
         app:layout_constraintStart_toEndOf="@+id/supplyText" />
 
     <TextView
         android:id="@+id/demandText"
+        android:textColor="#fff"
         android:layout_width="wrap_content"
         android:layout_height="48dp"
         android:layout_marginStart="8dp"
@@ -43,44 +51,59 @@
         app:layout_constraintTop_toBottomOf="@+id/supplyText" />
 
     <EditText
+        android:background="#222"
+        android:textColor="#FFFFFF"
+        android:textColorHint="#a9a9a9"
         android:id="@+id/demandInput"
         android:layout_width="32dp"
-        android:layout_height="48dp"
+        android:padding="4dp"
+        android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:ems="10"
         android:inputType="number"
         android:text="@string/demandInput"
         android:hint="3"
+        app:layout_constraintTop_toTopOf="@id/demandText"
         app:layout_constraintBottom_toBottomOf="@+id/demandText"
         app:layout_constraintStart_toEndOf="@+id/demandText"
         android:autofillHints="" />
 
     <TextView
+        android:textSize="12sp"
+        android:textColor="#FFFFFF"
         android:id="@+id/initialSolutionMethodText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/initialSolutionMethodText"
         app:layout_constraintStart_toStartOf="@+id/initialSolutionMethod"
-        app:layout_constraintTop_toTopOf="@+id/supplyText" />
+        app:layout_constraintTop_toTopOf="@+id/supplyText"
+        app:layout_constraintBottom_toTopOf="@id/initialSolutionMethod"/>
 
     <Spinner
+        android:background="#222"
         android:id="@+id/initialSolutionMethod"
         android:layout_width="0dp"
-        android:layout_height="24dp"
-        android:layout_marginTop="8dp"
+        android:layout_height="32dp"
+        android:layout_marginTop="6dp"
+        android:layout_marginBottom="12dp"
         app:layout_constraintEnd_toEndOf="@+id/usingSteppingStone"
         app:layout_constraintStart_toStartOf="@+id/usingMODI"
-        app:layout_constraintTop_toBottomOf="@+id/initialSolutionMethodText" />
+        app:layout_constraintTop_toBottomOf="@+id/initialSolutionMethodText"
+        app:layout_constraintBottom_toTopOf="@id/optimizationMethods"/>
 
     <TextView
+        android:textSize="12sp"
         android:id="@+id/optimizationMethods"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/solution_optimizationText"
+        android:textColor="#FFF"
         app:layout_constraintBottom_toTopOf="@+id/usingSteppingStone"
         app:layout_constraintStart_toStartOf="@+id/usingMODI" />
 
     <CheckBox
+        android:textColor="#FFFFFF"
+        android:buttonTint="#FFFFFF"
         android:id="@+id/usingMODI"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -90,6 +113,8 @@
         app:layout_constraintStart_toEndOf="@+id/demandInput" />
 
     <CheckBox
+        android:textColor="#FFFFFF"
+        android:buttonTint="#FFFFFF"
         android:id="@+id/usingSteppingStone"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -99,15 +124,20 @@
         app:layout_constraintStart_toEndOf="@+id/usingMODI" />
 
     <Button
+        android:background="#222"
+        android:textColor="#FFF"
         android:id="@+id/build_table"
         android:layout_height="wrap_content"
         android:layout_width="0dp"
+        android:layout_marginTop="8dp"
         app:layout_constraintTop_toBottomOf="@id/demandText"
         app:layout_constraintStart_toStartOf="@id/demandText"
         android:text="@string/build_table"
         app:layout_constraintEnd_toEndOf="@id/demandInput"
         />
     <Button
+        android:background="#222"
+        android:textColor="#FFF"
         android:id="@+id/solve_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -117,11 +147,12 @@
         />
 
     <ScrollView
+        android:background="#FFFFFF"
         android:id="@+id/scrollView2"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -158,6 +189,8 @@
                     android:id="@+id/displayTotalCost"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true"
                     android:layout_margin="32dp"
                     android:textSize="22sp"
                     android:textStyle="bold"

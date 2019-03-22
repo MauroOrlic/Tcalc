@@ -71,7 +71,7 @@ MERGED from [com.android.support:versionedparcelable:28.0.0] /home/mauro/.gradle
 	android:allowBackup
 		ADDED from /home/mauro/Workspace/Tcalc/app/src/main/AndroidManifest.xml:6:9-35
 	android:theme
-		ADDED from /home/mauro/Workspace/Tcalc/app/src/main/AndroidManifest.xml:11:9-40
+		ADDED from /home/mauro/Workspace/Tcalc/app/src/main/AndroidManifest.xml:11:9-59
 activity#com.mauroorlic.tcalc.MainActivity
 ADDED from /home/mauro/Workspace/Tcalc/app/src/main/AndroidManifest.xml:12:9-18:20
 	android:screenOrientation
