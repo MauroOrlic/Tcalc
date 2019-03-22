@@ -33,7 +33,12 @@ public class OutputTable {
         lineTag.setVisibility(View.INVISIBLE);
         for(int i=0; i<transportProblem.numOfDemands;i++){
             lineTag = inflater.inflate(R.layout.output_resource_cell, tableRow,false);
-            ((TextView)lineTag.findViewById(R.id.resourceAmount)).setText(Html.fromHtml(("D"+"<sub>"+(i+1)+"</sub>")));
+            if(i==transportProblem.numOfDemands-1 && transportProblem.dummy ==-1){
+                ((TextView) lineTag.findViewById(R.id.resourceAmount)).setText(Html.fromHtml(("D" + "<sub>d</sub>")));
+            }
+            else {
+                ((TextView) lineTag.findViewById(R.id.resourceAmount)).setText(Html.fromHtml(("D" + "<sub>" + (i + 1) + "</sub>")));
+            }
             tableRow.addView(lineTag);
         }
 
@@ -41,7 +46,12 @@ public class OutputTable {
             tableRow = new TableRow(outputTableReference.getContext());
             outputTableReference.addView(tableRow);
             lineTag = inflater.inflate(R.layout.output_resource_cell, tableRow,false);
-            ((TextView)lineTag.findViewById(R.id.resourceAmount)).setText(Html.fromHtml(("S"+"<sub>"+(i+1)+"</sub>")));
+            if(i==transportProblem.numOfSupplies-1 && transportProblem.dummy ==1){
+                ((TextView) lineTag.findViewById(R.id.resourceAmount)).setText(Html.fromHtml(("S" + "<sub>d</sub>")));
+            }
+            else {
+                ((TextView) lineTag.findViewById(R.id.resourceAmount)).setText(Html.fromHtml(("S" + "<sub>" + (i + 1) + "</sub>")));
+            }
             tableRow.addView(lineTag);
             tableRow.setLayoutParams(new TableRow.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
             for(int j=0;j<transportProblem.numOfDemands;j++) {

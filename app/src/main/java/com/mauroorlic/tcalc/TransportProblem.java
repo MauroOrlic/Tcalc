@@ -17,6 +17,7 @@ public class TransportProblem {
     List<ResourceCell> supply = new ArrayList<>();
     List<ArrayList<CostCell>> costTable = new ArrayList<>();
     Double totalCost;
+    int dummy = 0;
 
     public TransportProblem(List<Double> demand, List<Double> supply, List<List<Double>> costTable) {
         //entering raw demands into demand arraylist
@@ -86,6 +87,7 @@ public class TransportProblem {
         } else if (totalDemand > totalSupply) {
             numOfSupplies += 1;
             supply.add(new ResourceCell(totalDemand - totalSupply));
+            dummy = 1;
 
             costTable.add(new ArrayList<CostCell>());
             for (int i = 0; i < supply.size(); i++) {
@@ -95,6 +97,7 @@ public class TransportProblem {
         } else if (totalDemand < totalSupply) {
             numOfDemands += 1;
             demand.add(new ResourceCell(totalSupply - totalDemand));
+            dummy = -1;
 
             /*for (ArrayList<CostCell> row : costTable) {
                 row.add(new CostCell(0.0));
