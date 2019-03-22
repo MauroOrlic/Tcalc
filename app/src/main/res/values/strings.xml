@@ -13,7 +13,7 @@
     <string-array name="initialSolutionMethods">
         <item>North-West corner</item>
         <item>Least cost</item>
-        <item>Vogel</item>
+        <!-- <item>Vogel</item> -->
     </string-array>
 
 </resources>

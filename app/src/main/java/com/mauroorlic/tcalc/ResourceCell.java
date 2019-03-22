@@ -12,6 +12,10 @@ public class ResourceCell {
         this.total = total;
         this.remaining = total;
     }
+    public ResourceCell(ResourceCell resourceCell){
+        this.total = resourceCell.total;
+        this.remaining = resourceCell.remaining;
+    }
 
     public Double getTotal() {
         return total;

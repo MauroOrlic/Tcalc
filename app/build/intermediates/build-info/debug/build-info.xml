@@ -5,36 +5,42 @@
     build-mode="COLD"
     density="xxhdpi"
     format="10"
-    ir-eligibility="COMPATIBLE"
+    ir-eligibility="R_CLASS_CHANGE"
     plugin-version="3.3.2"
-    timestamp="1553246031278"
+    timestamp="1553264445298"
     token="8825925456994267127"
     verifier="COLD_SWAP_REQUESTED" >
 
     <task
         name="javac"
-        duration="1687" />
+        duration="243" />
     <task
         name="instant-run-dex"
         duration="0" />
     <task
         name="instant-run-transform"
-        duration="571" />
+        duration="11" />
     <task
         name="verifier"
-        duration="262" />
+        duration="336" />
 
+    <artifact
+        location="/home/mauro/Workspace/Tcalc/app/build/intermediates/resources/instant-run/debug/resources-debug.apk"
+        type="SPLIT" />
     <artifact
         location="/home/mauro/Workspace/Tcalc/app/build/intermediates/split-apk/debug/slices/slice_1.apk"
         type="SPLIT" />
 
     <build
         build-mode="FULL"
-        timestamp="1553244997249"
+        timestamp="1553260094711"
         verifier="FULL_BUILD_REQUESTED" >
         <artifact
             location="/home/mauro/Workspace/Tcalc/app/build/intermediates/split-apk/debug/slices/slice_1.apk"
             type="SPLIT" />
+        <artifact
+            location="/home/mauro/Workspace/Tcalc/app/build/intermediates/instant-run-apk/debug/app-debug.apk"
+            type="SPLIT_MAIN" />
         <artifact
             location="/home/mauro/Workspace/Tcalc/app/build/intermediates/split-apk/debug/slices/slice_7.apk"
             type="SPLIT" />
@@ -68,15 +74,15 @@
         <artifact
             location="/home/mauro/Workspace/Tcalc/app/build/intermediates/split-apk/debug/slices/slice_8.apk"
             type="SPLIT" />
-        <artifact
-            location="/home/mauro/Workspace/Tcalc/app/build/intermediates/instant-run-apk/debug/app-debug.apk"
-            type="SPLIT_MAIN" />
     </build>
     <build
         build-mode="COLD"
-        ir-eligibility="COMPATIBLE"
-        timestamp="1553246031278"
+        ir-eligibility="R_CLASS_CHANGE"
+        timestamp="1553264445298"
         verifier="COLD_SWAP_REQUESTED" >
+        <artifact
+            location="/home/mauro/Workspace/Tcalc/app/build/intermediates/resources/instant-run/debug/resources-debug.apk"
+            type="SPLIT" />
         <artifact
             location="/home/mauro/Workspace/Tcalc/app/build/intermediates/split-apk/debug/slices/slice_1.apk"
             type="SPLIT" />
