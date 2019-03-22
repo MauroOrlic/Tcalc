@@ -89,7 +89,7 @@ public class TransportProblem {
 
             costTable.add(new ArrayList<CostCell>());
             for (int i = 0; i < supply.size(); i++) {
-                costTable.get(costTable.size() - 1).add(new CostCell(0.0,costTable.size()-1,i));
+                costTable.get(demand.size() - 1).add(new CostCell(0.0,costTable.size()-1,i));
             }
 
         } else if (totalDemand < totalSupply) {
@@ -162,7 +162,7 @@ public class TransportProblem {
         for(ArrayList<CostCell> row : costTable){
             costCellList.addAll(row);
         }
-        Comparator<CostCell> compareByCost = (CostCell o1, CostCell o2)-> {
+        Comparator<CostCell> compareCostCellLC = (CostCell o1, CostCell o2)-> {
             int difference = o1.cost.compareTo(o2.cost);
             if(difference==0){
                 Double o1MaxCapacity = Math.min(supply.get(o1.positionRow).remaining, demand.get(o1.positionColumn).remaining);
@@ -182,7 +182,7 @@ public class TransportProblem {
             }
             return difference;
         };
-        costCellList.sort(compareByCost);
+        costCellList.sort(compareCostCellLC);
         //TODO implement some sort of sorting algorithm for costCellList by cost. get it? some SORT of algorithm? :D
         Double alloted = 0.0;
 
@@ -195,7 +195,7 @@ public class TransportProblem {
                     demand.get(costCell.positionColumn).remaining -=alloted;
                 }
                 costCellList.remove(0);
-                costCellList.sort(compareByCost);
+                costCellList.sort(compareCostCellLC);
             }
 
 
@@ -209,6 +209,78 @@ public class TransportProblem {
     }
 
     public void initialVogel(Boolean optimizeMODI, Boolean optimizeSteppingStone) {
+        clearSolution();
+        balanceProblem();
+
+        List<ResourceCell> vSupply = new ArrayList<>(supply);
+        List<ResourceCell> vDemand = new ArrayList<>(demand);
+        List<Double> supplyMaxPenalty = new ArrayList<>(supply.size());
+        List<Double> demandMaxPenalty = new ArrayList<>(demand.size());
+        List<List<CostCell>> vCostTable = new ArrayList<>(costTable);
+        List<CostCell> candidateCells = new ArrayList<>();
+        List<Double> penaltyCandidates = new ArrayList<>();
+        Double maxPenalty;
+
+        Comparator<CostCell> compareCostCellV = (CostCell o1, CostCell o2) ->{
+            int difference = o1.cost.compareTo(o2.cost);
+            if(difference==0){
+                Double o1MaxCapacity = Math.min(supply.get(o1.positionRow).remaining, demand.get(o1.positionColumn).remaining);
+                Double o2MaxCapacity = Math.min(supply.get(o2.positionRow).remaining, demand.get(o2.positionColumn).remaining);
+                difference = -o1MaxCapacity.compareTo(o2MaxCapacity);
+                if(difference==0){
+                    Double o1RemainingSupply = supply.get(o1.positionRow).remaining - o1MaxCapacity;
+                    Double o2RemainingSupply = supply.get(o2.positionRow).remaining - o2MaxCapacity;
+                    difference = -o1RemainingSupply.compareTo(o2RemainingSupply);
+                    if(difference==0) {
+                        difference = o1.positionRow.compareTo(o2.positionRow);
+                        if (difference == 0) {
+                            difference = o1.positionColumn.compareTo(o2.positionColumn);
+                        }
+                    }
+                }
+            }
+            return difference;
+        };
+
+        while(vCostTable!=null){
+            maxPenalty = 0.0;
+            //getting max penalties for supply
+            for(int i = 0; i<vSupply.size();i++){
+                penaltyCandidates.clear();
+                for(int j=0; j<vDemand.size();j++){
+                    penaltyCandidates.add(vCostTable.get(i).get(j).cost);
+                }
+                supplyMaxPenalty.set(i,getMaxPenalty(penaltyCandidates));
+            }
+            //getting max penalties for demand
+            for(int i=0; i<vDemand.size();i++){
+                penaltyCandidates.clear();
+                for(int j=0; j<vSupply.size();j++){
+                    penaltyCandidates.add(vCostTable.get(i).get(j).cost);
+                }
+                demandMaxPenalty.set(i, getMaxPenalty(penaltyCandidates));
+            }
+
+            maxPenalty = Math.max(maxPenalty, Collections.max(supplyMaxPenalty));
+            maxPenalty = Math.max(maxPenalty, Collections.max(demandMaxPenalty));
+            for(int i=0; i< supplyMaxPenalty.size();i++){
+                if(supplyMaxPenalty.get(i).equals(maxPenalty)){
+                    for(int j=0; j< demandMaxPenalty.size();j++){
+                        candidateCells.add(vCostTable.get(i).get(j));
+                    }
+                }
+            }
+            for(int i=0; i< demandMaxPenalty.size(); i++){
+                if(demandMaxPenalty.get(i).equals(maxPenalty)){
+                    for(int j=0; j<supplyMaxPenalty.size();j++){
+                        candidateCells.add(vCostTable.get(i).get(j));
+                    }
+                }
+            }
+            candidateCells.sort(compareCostCellV);
+            //candidateCells.get(0) je odabran
+            
+        }
 
 
         if (optimizeMODI) {
@@ -218,6 +290,12 @@ public class TransportProblem {
             optimizeSteppingStone();
         }
         getTotalCost();
+    }
+    private Double getMaxPenalty(List<Double> list){
+        List<Double> nlist = new ArrayList<>(list);
+        Double minCost = Collections.min(nlist);
+        nlist.remove(Collections.min(nlist));
+        return Collections.min(nlist) - minCost;
     }
 
     private void optimizeMODI() {
