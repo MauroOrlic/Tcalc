@@ -133,7 +133,7 @@ public class TransportProblem {
         while (currentDemand<numOfDemands && currentSupply<numOfSupplies) {
 
             alloted = Math.min(demand.get(currentDemand).remaining, supply.get(currentSupply).remaining);
-            costTable.get(currentSupply).get(currentDemand).alloted = alloted;
+            costTable.get(currentSupply).get(currentDemand).alloted = alloted; //for certain problems throws ArrayIndexOutOfBounds exception, not sure why
 
             supply.get(currentSupply).remaining -= alloted;
             demand.get(currentDemand).remaining -= alloted;

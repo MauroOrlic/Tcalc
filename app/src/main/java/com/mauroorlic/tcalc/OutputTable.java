@@ -62,7 +62,7 @@ public class OutputTable {
                 TextView cost = v.findViewById(R.id.inflateable_outputCost);
                 cost.setText(format.format(costCell.cost));
                 TextView alloted = v.findViewById(R.id.inflateable_outputAlloted);
-                if(!costCell.alloted.equals(0.0)) {
+                if(!costCell.alloted.equals(0.0) && !costCell.alloted.equals(Double.MIN_VALUE)) {
                     alloted.setText(format.format(costCell.alloted));
                 }
                 else{

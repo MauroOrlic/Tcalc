@@ -42,10 +42,7 @@ public class MainActivity extends AppCompatActivity {
 
         final Spinner initialSolutionMethod = findViewById(R.id.initialSolutionMethod);
         final ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.initialSolutionMethods, R.layout.support_simple_spinner_dropdown_item);
-        initialSolutionMethod.setAdapter(adapter);/*
-        for(int i=0; i< initialSolutionMethod.getChildCount();i++){
-            ((EditText) initialSolutionMethod.getChildAt(i)).setTextColor(Color.rgb(255,255,255));
-        }*/
+        initialSolutionMethod.setAdapter(adapter);
 
         final EditText supplyInput = findViewById(R.id.supplyInput);
         final EditText demandInput = findViewById(R.id.demandInput);
@@ -67,6 +64,8 @@ public class MainActivity extends AppCompatActivity {
                 }
                 inputTable = new InputTable(inputTableLayout,demand, supply);
                 inputTable.buildTable();
+                outputTableLayout.removeAllViews();
+                displayTotalCost.setText("");
                 calculateButton.setEnabled(true);
             }
         });
@@ -107,8 +106,11 @@ public class MainActivity extends AppCompatActivity {
                     displayTotalCost.requestFocus();
                 }
                 catch (IllegalArgumentException e){
-                    Toast.makeText(MainActivity.this, "Supply/Demand values cannot be zero", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MainActivity.this, "Supply/Demand cannot be zero", Toast.LENGTH_SHORT).show();
                     return;
+                }
+                catch(ArrayIndexOutOfBoundsException e){
+                    Toast.makeText(MainActivity.this, "This shouldn't happen :(", Toast.LENGTH_SHORT).show();
                 }
             }
         });
