@@ -4,9 +4,9 @@ import android.util.Log;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Iterator;
 import java.util.List;
 
 public class TransportProblem {
@@ -46,7 +46,8 @@ public class TransportProblem {
 
         this.totalCost = 0.0;
     }
-    public TransportProblem(TransportProblem transportProblem){
+
+    public TransportProblem(TransportProblem transportProblem) {
         this.numOfDemands = transportProblem.numOfDemands;
         this.numOfSupplies = transportProblem.numOfSupplies;
         this.demand = transportProblem.demand;
@@ -92,7 +93,7 @@ public class TransportProblem {
 
             costTable.add(new ArrayList<CostCell>());
             for (int i = 0; i < supply.size(); i++) {
-                costTable.get(demand.size() - 1).add(new CostCell(0.0,costTable.size()-1,i));
+                costTable.get(demand.size() - 1).add(new CostCell(0.0, costTable.size() - 1, i));
             }
 
         } else if (totalDemand < totalSupply) {
@@ -103,8 +104,8 @@ public class TransportProblem {
             /*for (ArrayList<CostCell> row : costTable) {
                 row.add(new CostCell(0.0));
             }*/
-            for(int i=0; i< numOfSupplies;i++){
-                costTable.get(i).add(new CostCell(0.0, i, numOfDemands-1));
+            for (int i = 0; i < numOfSupplies; i++) {
+                costTable.get(i).add(new CostCell(0.0, i, numOfDemands - 1));
             }
         }
 
@@ -130,7 +131,7 @@ public class TransportProblem {
         int currentDemand = 0;
         int currentSupply = 0;
         Double alloted = 0.0;
-        while (currentDemand<numOfDemands && currentSupply<numOfSupplies) {
+        while (currentDemand < numOfDemands && currentSupply < numOfSupplies) {
 
             alloted = Math.min(demand.get(currentDemand).remaining, supply.get(currentSupply).remaining);
             costTable.get(currentSupply).get(currentDemand).alloted = alloted; //for certain problems throws ArrayIndexOutOfBounds exception, not sure why
@@ -163,20 +164,20 @@ public class TransportProblem {
         balanceProblem();
 
         List<CostCell> costCellList = new ArrayList<>();
-        for(ArrayList<CostCell> row : costTable){
+        for (ArrayList<CostCell> row : costTable) {
             costCellList.addAll(row);
         }
-        Comparator<CostCell> compareCostCellLC = (CostCell o1, CostCell o2)-> {
+        Comparator<CostCell> compareCostCellLC = (CostCell o1, CostCell o2) -> {
             int difference = o1.cost.compareTo(o2.cost);
-            if(difference==0){
+            if (difference == 0) {
                 Double o1MaxCapacity = Math.min(supply.get(o1.positionRow).remaining, demand.get(o1.positionColumn).remaining);
                 Double o2MaxCapacity = Math.min(supply.get(o2.positionRow).remaining, demand.get(o2.positionColumn).remaining);
                 difference = -o1MaxCapacity.compareTo(o2MaxCapacity);
-                if(difference==0){
+                if (difference == 0) {
                     Double o1RemainingSupply = supply.get(o1.positionRow).remaining - o1MaxCapacity;
                     Double o2RemainingSupply = supply.get(o2.positionRow).remaining - o2MaxCapacity;
                     difference = -o1RemainingSupply.compareTo(o2RemainingSupply);
-                    if(difference==0) {
+                    if (difference == 0) {
                         difference = o1.positionRow.compareTo(o2.positionRow);
                         if (difference == 0) {
                             difference = o1.positionColumn.compareTo(o2.positionColumn);
@@ -189,17 +190,17 @@ public class TransportProblem {
         costCellList.sort(compareCostCellLC);
         Double alloted = 0.0;
 
-            while(costCellList.size()!=0){
-                CostCell costCell = costCellList.get(0);
-                if(supply.get(costCell.positionRow).remaining!=0.0 && demand.get(costCell.positionColumn).remaining!=0.0){
-                    alloted = Math.min(supply.get(costCell.positionRow).remaining, demand.get(costCell.positionColumn).remaining);
-                    costCell.alloted = alloted;
-                    supply.get(costCell.positionRow).remaining -=alloted;
-                    demand.get(costCell.positionColumn).remaining -=alloted;
-                }
-                costCellList.remove(0);
-                costCellList.sort(compareCostCellLC);
+        while (costCellList.size() != 0) {
+            CostCell costCell = costCellList.get(0);
+            if (supply.get(costCell.positionRow).remaining != 0.0 && demand.get(costCell.positionColumn).remaining != 0.0) {
+                alloted = Math.min(supply.get(costCell.positionRow).remaining, demand.get(costCell.positionColumn).remaining);
+                costCell.alloted = alloted;
+                supply.get(costCell.positionRow).remaining -= alloted;
+                demand.get(costCell.positionColumn).remaining -= alloted;
             }
+            costCellList.remove(0);
+            costCellList.sort(compareCostCellLC);
+        }
 
 
         if (optimizeMODI) {
@@ -210,52 +211,30 @@ public class TransportProblem {
         }
         getTotalCost();
     }
+
     //DOESNT WORK dont know if I will be able to fix
     public void initialVogel(Boolean optimizeMODI, Boolean optimizeSteppingStone) {
         clearSolution();
         balanceProblem();
 
-        List<ResourceCell> vSupply = new ArrayList<>();
-        for(int i=0; i<numOfSupplies; i++){
-            vSupply.add(new ResourceCell(supply.get(i)));
-        }
+        Boolean[] supplyUsed = new Boolean[supply.size()];
+        Boolean[] demandUsed = new Boolean[demand.size()];
+        Arrays.fill(supplyUsed, false);
+        Arrays.fill(demandUsed, false);
+        Double[] supplyPenalty = new Double[supply.size()];
+        Double[] demandPenalty = new Double[demand.size()];
 
-        List<ResourceCell> vDemand = new ArrayList<>();
-        for(int i=0; i<numOfDemands;i++){
-            vDemand.add(new ResourceCell(demand.get(i)));
-        }
-        List<List<CostCell>> vCostTable = new ArrayList<>();
-        for(int i=0; i<numOfSupplies; i++){
-            vCostTable.add(new ArrayList<>());
-            for(int j=0; j< numOfDemands;j++){
-                vCostTable.get(i).add(new CostCell(costTable.get(i).get(j)));
-            }
-        }
-
-        List<Double> supplyMaxPenalty = new ArrayList<>();
-        List<Double> demandMaxPenalty = new ArrayList<>();
-
-
-
-        List<CostCell> candidateCells = new ArrayList<>();
-        List<Double> penaltyCandidates = new ArrayList<>();
-        CostCell chosenCell;
-        Double maxQuantity;
-        int toDeleteSupplyIndex = -1;
-        int toDeleteDemandIndex = -1;
-        Double maxPenalty;
-
-        Comparator<CostCell> compareCostCellV = (CostCell o1, CostCell o2) ->{
+        Comparator<CostCell> compareCostCellVogel = (CostCell o1, CostCell o2) -> {
             int difference = o1.cost.compareTo(o2.cost);
-            if(difference==0){
+            if (difference == 0) {
                 Double o1MaxCapacity = Math.min(supply.get(o1.positionRow).remaining, demand.get(o1.positionColumn).remaining);
                 Double o2MaxCapacity = Math.min(supply.get(o2.positionRow).remaining, demand.get(o2.positionColumn).remaining);
                 difference = -o1MaxCapacity.compareTo(o2MaxCapacity);
-                if(difference==0){
+                if (difference == 0) {
                     Double o1RemainingSupply = supply.get(o1.positionRow).remaining - o1MaxCapacity;
                     Double o2RemainingSupply = supply.get(o2.positionRow).remaining - o2MaxCapacity;
                     difference = -o1RemainingSupply.compareTo(o2RemainingSupply);
-                    if(difference==0) {
+                    if (difference == 0) {
                         difference = o1.positionRow.compareTo(o2.positionRow);
                         if (difference == 0) {
                             difference = o1.positionColumn.compareTo(o2.positionColumn);
@@ -266,78 +245,73 @@ public class TransportProblem {
             return difference;
         };
 
-        while(vCostTable!=null){
-            maxPenalty = 0.0;
-            supplyMaxPenalty.clear();
-            demandMaxPenalty.clear();
-            //getting max penalties for supply
-            for(int i = 0; i<vSupply.size();i++){
-                penaltyCandidates.clear();
-                for(int j=0; j<vDemand.size();j++){
-                    penaltyCandidates.add(vCostTable.get(i).get(j).cost);
+        while (containsFalse(supplyUsed) && containsFalse(demandUsed)) {
+
+            List<Double> costGroup = new ArrayList<>();
+            Arrays.fill(supplyPenalty, 0.0);
+            Arrays.fill(demandPenalty, 0.0);
+
+            //getting penalties for supply
+            for (int i = 0; i < supply.size(); i++) {
+                if (!supplyUsed[i]) {
+                    costGroup.clear();
+                    for (int j = 0; j < demand.size(); j++) {
+                        if(!demandUsed[j]) {
+                            costGroup.add(costTable.get(i).get(j).cost);
+                        }
+                    }
+                    supplyPenalty[i] = getGroupPenalty(costGroup);
                 }
-                supplyMaxPenalty.add(getMaxPenalty(penaltyCandidates));
             }
-            //getting max penalties for demand
-            for(int i=0; i<vDemand.size();i++){
-                penaltyCandidates.clear();
-                for(int j=0; j<vSupply.size();j++){
-                    penaltyCandidates.add(vCostTable.get(j).get(i).cost);
+            //getting penalties for demand
+            for (int j = 0; j < demand.size(); j++) {
+                if (!demandUsed[j]) {
+                    costGroup.clear();
+                    for (int i = 0; i < supply.size(); i++) {
+                        if(!supplyUsed[i]) {
+                            costGroup.add(costTable.get(i).get(j).cost);
+                        }
+                    }
+                    demandPenalty[j] = getGroupPenalty(costGroup);
                 }
-                demandMaxPenalty.add(getMaxPenalty(penaltyCandidates));
             }
 
-            maxPenalty = Math.max(maxPenalty, Collections.max(supplyMaxPenalty));
-            maxPenalty = Math.max(maxPenalty, Collections.max(demandMaxPenalty));
+            //find the maximum penalty in rows/columns
+            Double maxPenalty = 0.0;
+            for (int i = 0; i < supply.size(); i++) {
+                maxPenalty = Math.max(maxPenalty, supplyPenalty[i]);
+            }
+            for (int i = 0; i < demand.size(); i++) {
+                maxPenalty = Math.max(maxPenalty, demandPenalty[i]);
+            }
 
-            for(int i=0; i< supplyMaxPenalty.size();i++){
-                if(supplyMaxPenalty.get(i).equals(maxPenalty)){
-                    for(int j=0; j< demandMaxPenalty.size();j++){
-                        candidateCells.add(vCostTable.get(i).get(j));
+            //getting all cells that are part a group that has penalty equal to maxPenalty
+            List<CostCell> allocationCandidates = new ArrayList<>();
+            for (int i = 0; i < supply.size(); i++) {
+                for (int j = 0; j < demand.size(); j++) {
+                    if ((!supplyUsed[i] && !demandUsed[j]) && (supplyPenalty[i].equals(maxPenalty) || demandPenalty[j].equals(maxPenalty))) {
+                        allocationCandidates.add(costTable.get(i).get(j));
                     }
                 }
             }
-            for(int i=0; i< demandMaxPenalty.size(); i++){
-                if(demandMaxPenalty.get(i).equals(maxPenalty)){
-                    for(int j=0; j<supplyMaxPenalty.size();j++){
-                        candidateCells.add(vCostTable.get(i).get(j));
-                    }
-                }
-            }
-            candidateCells.sort(compareCostCellV);
-            chosenCell = candidateCells.get(0);
-            //candidateCells.get(0) je odabran
-            maxQuantity = Math.min(demand.get(chosenCell.positionColumn).remaining , supply.get(chosenCell.positionRow).remaining);
+            //sorting cells from most to least desirable
+            allocationCandidates.sort(compareCostCellVogel);
+            CostCell chosenCostCell = allocationCandidates.get(0);
 
-            costTable.get(chosenCell.positionRow).get(chosenCell.positionColumn).alloted += maxQuantity;
-            supply.get(chosenCell.positionRow).remaining -= maxQuantity;
-            demand.get(chosenCell.positionColumn).remaining -=maxQuantity;
-            for(int i=0; i<vSupply.size();i++){
-                for(int j=0; j<vDemand.size();j++){
-                    if(vCostTable.get(i).get(j).equals(chosenCell)){
-                        toDeleteSupplyIndex = j;
-                        toDeleteDemandIndex = i;
-                    }
-                }
-            }
+            //allocating transport to chosen cell
+            Double allocationAmount = Math.min(supply.get(chosenCostCell.positionRow).remaining, demand.get(chosenCostCell.positionColumn).remaining);
+            chosenCostCell.alloted = allocationAmount;
+            supply.get(chosenCostCell.positionRow).remaining -= allocationAmount;
+            demand.get(chosenCostCell.positionColumn).remaining -= allocationAmount;
 
-            if(supply.get(chosenCell.positionRow).remaining<demand.get(chosenCell.positionColumn).remaining){
-                vCostTable.remove(toDeleteDemandIndex);
-                vSupply.remove(toDeleteDemandIndex);
+
+            // marking supply as used if emptied
+            if (supply.get(chosenCostCell.positionRow).remaining.equals(0.0)){
+                supplyUsed[chosenCostCell.positionRow] = true;
             }
-            else if(supply.get(chosenCell.positionRow).remaining>demand.get(chosenCell.positionColumn).remaining){
-                for(int i=0; i< vSupply.size();i++){
-                    vCostTable.get(i).remove(toDeleteSupplyIndex);
-                }
-                vDemand.remove(toDeleteSupplyIndex);
-            }
-            else if(supply.get(chosenCell.positionRow).remaining.equals(demand.get(chosenCell.positionColumn).remaining)){
-                for(int i=0; i< vSupply.size();i++){
-                    vCostTable.get(i).remove(toDeleteSupplyIndex);
-                }
-                vDemand.remove(toDeleteSupplyIndex);
-                vCostTable.remove(toDeleteDemandIndex);
-                vSupply.remove(toDeleteDemandIndex);
+            //marking demand as used if emptied
+            if(demand.get(chosenCostCell.positionColumn).remaining.equals(0.0)){
+                demandUsed[chosenCostCell.positionRow] = true;
             }
         }
 
@@ -350,11 +324,21 @@ public class TransportProblem {
         }
         getTotalCost();
     }
-    private Double getMaxPenalty(List<Double> list){
-        List<Double> nlist = new ArrayList<>(list);
-        Double minCost = Collections.min(nlist);
-        nlist.remove(Collections.min(nlist));
-        return (Collections.min(nlist) - minCost);
+    private boolean containsFalse(Boolean[] a){
+        for(int i=0; i<a.length;i++){
+            if(!a[i]){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private Double getGroupPenalty(List<Double> list) {
+        while(list.size()<2){
+            list.add(0.0);
+        }
+        Collections.sort(list);
+        return list.get(1) - list.get(0);
     }
 
     private void optimizeMODI() {
@@ -364,9 +348,9 @@ public class TransportProblem {
         Double[][] costMatrix = new Double[numOfSupplies][numOfDemands];
         Double[][] costMatrixInverted = new Double[numOfSupplies][numOfDemands];
         //reading costs of alloted cells
-        for(int i=0; i<numOfSupplies;i++){
-            for(int j=0; j<numOfDemands;j++) {
-                if (costTable.get(i).get(j).alloted!=0.0) {
+        for (int i = 0; i < numOfSupplies; i++) {
+            for (int j = 0; j < numOfDemands; j++) {
+                if (costTable.get(i).get(j).alloted != 0.0) {
                     costMatrix[i][j] = costTable.get(i).get(j).cost;
                 }
             }
@@ -382,36 +366,36 @@ public class TransportProblem {
             for (int i = 0; i < u.length; i++) {
                 for (int j = 0; j < v.length; j++) {
                     if (costMatrix[i][j] != null) {
-                            if (u[i] == null && v[j] != null) {
-                                u[i] = costMatrix[i][j] - v[j];
+                        if (u[i] == null && v[j] != null) {
+                            u[i] = costMatrix[i][j] - v[j];
 
-                            } else if (v[j] == null && u[i] != null) {
-                                v[j] = costMatrix[i][j] - u[i];
-                            }else if( v[j] == null && u[i]==null){
-                                tryAgain = true;
-                            }
+                        } else if (v[j] == null && u[i] != null) {
+                            v[j] = costMatrix[i][j] - u[i];
+                        } else if (v[j] == null && u[i] == null) {
+                            tryAgain = true;
+                        }
 
 
                     }
                 }
             }
-        }while (tryAgain);
+        } while (tryAgain);
 
         //building inverted cost matrix
-        for(int i=0;i<u.length;i++){
-            for(int j=0; j<v.length;j++){
-                if(costMatrix[i][j]==null){
+        for (int i = 0; i < u.length; i++) {
+            for (int j = 0; j < v.length; j++) {
+                if (costMatrix[i][j] == null) {
 
-                    costMatrixInverted[i][j] = costTable.get(i).get(j).cost -(v[j] + u[i]);
+                    costMatrixInverted[i][j] = costTable.get(i).get(j).cost - (v[j] + u[i]);
                 }
             }
         }
         //search for CostCell which can reduce the total transport cost
         boolean breakOut = false;
 
-        for(int i=0; i<u.length;i++){
-            for(int j=0;j<v.length; j++){
-                if(costMatrixInverted[i][j] != null && costMatrixInverted[i][j]<0.0){
+        for (int i = 0; i < u.length; i++) {
+            for (int j = 0; j < v.length; j++) {
+                if (costMatrixInverted[i][j] != null && costMatrixInverted[i][j] < 0.0) {
                     //stepping stone rotate
                     CostCell newSolutionCell = costTable.get(i).get(j);
                     CostCell[] path = getClosedPath(newSolutionCell);
@@ -419,22 +403,21 @@ public class TransportProblem {
                     double lowestQuantity = Integer.MAX_VALUE;
                     boolean plus = true;
 
-                    for(CostCell currentCostCell : path){
-                        if(!plus){
-                            if(currentCostCell.alloted<lowestQuantity){
-                                lowestQuantity=currentCostCell.alloted;
+                    for (CostCell currentCostCell : path) {
+                        if (!plus) {
+                            if (currentCostCell.alloted < lowestQuantity) {
+                                lowestQuantity = currentCostCell.alloted;
                             }
                         }
                         plus = !plus;
                     }
                     plus = true;
 
-                    for(CostCell s : path){
-                        if(plus){
-                            s.alloted+=lowestQuantity;
-                        }
-                        else{
-                            s.alloted-=lowestQuantity;
+                    for (CostCell s : path) {
+                        if (plus) {
+                            s.alloted += lowestQuantity;
+                        } else {
+                            s.alloted -= lowestQuantity;
                         }
                         plus = !plus;
                     }
@@ -442,9 +425,13 @@ public class TransportProblem {
                     breakOut = true;
                 }
 
-                if(breakOut){break;}
+                if (breakOut) {
+                    break;
+                }
             }
-            if(breakOut){break;}
+            if (breakOut) {
+                break;
+            }
         }
     }
 
@@ -454,12 +441,12 @@ public class TransportProblem {
         CostCell leaving = null;
         fixDegenerateCase();
 
-        for(ArrayList<CostCell> row : costTable){
-            for(CostCell costCell : row){
-                if(costCell.alloted !=0.0){
+        for (ArrayList<CostCell> row : costTable) {
+            for (CostCell costCell : row) {
+                if (costCell.alloted != 0.0) {
                     continue;
                 }
-                CostCell trial = new CostCell(costCell.cost,0.0,costCell.positionRow, costCell.positionColumn);
+                CostCell trial = new CostCell(costCell.cost, 0.0, costCell.positionRow, costCell.positionColumn);
                 CostCell[] path = getClosedPath(trial);
 
                 double reduction = 0;
@@ -468,31 +455,30 @@ public class TransportProblem {
 
                 boolean plus = true;
 
-                for(CostCell s : path){
-                    if(plus) {
+                for (CostCell s : path) {
+                    if (plus) {
                         reduction += s.cost;
-                    }
-                    else{
+                    } else {
                         reduction -= s.cost;
-                        if(s.alloted<lowestQuanity){
+                        if (s.alloted < lowestQuanity) {
                             leavingCandidate = s;
                             lowestQuanity = s.alloted;
                         }
                     }
                     plus = !plus;
                 }
-                if(reduction<maxReduction){
+                if (reduction < maxReduction) {
                     move = path;
                     leaving = leavingCandidate;
                     maxReduction = reduction;
                 }
             }
         }
-        if(move!=null){
+        if (move != null) {
             double q = leaving.alloted;
             boolean plus = true;
-            for(CostCell s : move){
-                s.alloted+= plus ? q: -q;
+            for (CostCell s : move) {
+                s.alloted += plus ? q : -q;
                 //costTable.get(s.positionRow).set(s.positionColumn, s.alloted == 0 ? new CostCell(0.0,0.0, s.positionRow, s.positionColumn):s);
                 costTable.get(s.positionRow).get(s.positionColumn).alloted = s.alloted;
                 costTable.get(s.positionRow).get(s.positionColumn).cost = s.cost;
@@ -501,44 +487,46 @@ public class TransportProblem {
             optimizeSteppingStone();
         }
     }
-    private CostCell[] getClosedPath(CostCell startingCostCell){
+
+    private CostCell[] getClosedPath(CostCell startingCostCell) {
         final List<CostCell> path = matrixToList();
         path.add(0, startingCostCell);
         while (path.removeIf(e -> {
-            CostCell[] neighbors = getNeighbors(e,path);
-            return  neighbors[0] == null || neighbors[1] ==null;
-        }));
+            CostCell[] neighbors = getNeighbors(e, path);
+            return neighbors[0] == null || neighbors[1] == null;
+        })) ;
 
         CostCell[] stones = path.toArray(new CostCell[path.size()]);
         CostCell previous = startingCostCell;
-        for(int i=0; i< stones.length;i++){
+        for (int i = 0; i < stones.length; i++) {
             stones[i] = previous;
-            previous = getNeighbors(previous,path)[i % 2];
+            previous = getNeighbors(previous, path)[i % 2];
         }
-        return  stones;
+        return stones;
     }
-    private List<CostCell> matrixToList(){
+
+    private List<CostCell> matrixToList() {
         List<CostCell> costList = new ArrayList<>();
-        for(ArrayList<CostCell> row :costTable){
-            for(CostCell costCell : row){
-                if(costCell.alloted!=0.0){
+        for (ArrayList<CostCell> row : costTable) {
+            for (CostCell costCell : row) {
+                if (costCell.alloted != 0.0) {
                     costList.add(costCell);
                 }
             }
         }
         return costList;
     }
-    private CostCell[] getNeighbors(CostCell startingCostCell, List<CostCell> list){
+
+    private CostCell[] getNeighbors(CostCell startingCostCell, List<CostCell> list) {
         CostCell[] neighbors = new CostCell[2];
-        for(CostCell currentCostCell : list){
-            if(currentCostCell != startingCostCell){
-                if(currentCostCell.positionRow.equals(startingCostCell.positionRow) && neighbors[0]==null){
+        for (CostCell currentCostCell : list) {
+            if (currentCostCell != startingCostCell) {
+                if (currentCostCell.positionRow.equals(startingCostCell.positionRow) && neighbors[0] == null) {
                     neighbors[0] = currentCostCell;
+                } else if (currentCostCell.positionColumn.equals(startingCostCell.positionColumn) && neighbors[1] == null) {
+                    neighbors[1] = currentCostCell;
                 }
-                else if(currentCostCell.positionColumn.equals(startingCostCell.positionColumn)&& neighbors[1]==null){
-                    neighbors[1]=currentCostCell;
-                }
-                if(neighbors[0]!=null && neighbors[1]!= null){
+                if (neighbors[0] != null && neighbors[1] != null) {
                     break;
                 }
             }
@@ -546,21 +534,22 @@ public class TransportProblem {
 
         return neighbors;
     }
-    private void fixDegenerateCase(){
+
+    private void fixDegenerateCase() {
         final Double epsilon = Double.MIN_VALUE;
 
         int allotedCellCount = 0;
-        for(ArrayList<CostCell> row : costTable){
-            for(CostCell costCell : row){
-                if(costCell.alloted!=0.0){
+        for (ArrayList<CostCell> row : costTable) {
+            for (CostCell costCell : row) {
+                if (costCell.alloted != 0.0) {
                     allotedCellCount++;
                 }
             }
         }
-        if(allotedCellCount < numOfSupplies+numOfDemands-1){
-            for(List<CostCell> row : costTable){
-                for(CostCell costCell : row){
-                    if(costCell.alloted==0.0 && getClosedPath(costCell).length==0){
+        if (allotedCellCount < numOfSupplies + numOfDemands - 1) {
+            for (List<CostCell> row : costTable) {
+                for (CostCell costCell : row) {
+                    if (costCell.alloted == 0.0 && getClosedPath(costCell).length == 0) {
                         costCell.alloted = epsilon;
                         return;
                     }
