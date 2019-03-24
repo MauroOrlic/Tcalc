@@ -14,10 +14,10 @@
         android:ems="10"
         android:inputType="numberDecimal"
         android:text=""
-        android:textColor="#333"
+        android:textColor="#ccc"
         android:hint="0"
         android:textColorHint="#646464"
         android:gravity="center"
-        android:background="#DFDFDF"
+        android:background="#444"
         />
 </android.support.constraint.ConstraintLayout>

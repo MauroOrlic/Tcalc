@@ -9,11 +9,11 @@
     <string name="stepping_stone">Stepping Stone</string>
     <string name="solution_optimizationText">Solution optimization</string>
     <string name="build_table">Build table</string>
-    <string name="solve">Solve</string>
+    <string name="solve">Solve Problem</string>
     <string-array name="initialSolutionMethods">
         <item>North-West corner</item>
         <item>Least cost</item>
-        <!-- <item>Vogel</item> -->
+        <item>Vogel</item>
     </string-array>
 
 </resources>

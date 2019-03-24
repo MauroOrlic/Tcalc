@@ -4,7 +4,7 @@
     android:layout_height="44dp"
     android:layout_margin="4dp"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="#DFDFDF">
+    android:background="#444">
 
     <TextView
         android:id="@+id/inflateable_outputCost"
@@ -16,12 +16,12 @@
         android:ems="7"
         android:textSize="16sp"
         android:text="125"
-        android:textColor="#2222aa"
+        android:textColor="#8888ff"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         />
     <TextView
-        android:textColor="#222"
+        android:textColor="#ccc"
         android:id="@+id/inflateable_outputAlloted"
         android:layout_marginEnd="4dp"
         android:layout_marginBottom="4dp"

@@ -245,6 +245,7 @@ public class TransportProblem {
             return difference;
         };
 
+        int breakCounter = 0;
         while (containsFalse(supplyUsed) && containsFalse(demandUsed)) {
 
             List<Double> costGroup = new ArrayList<>();
@@ -295,14 +296,18 @@ public class TransportProblem {
                 }
             }
             //sorting cells from most to least desirable
-            allocationCandidates.sort(compareCostCellVogel);
+            if(allocationCandidates.size()>1) {
+                allocationCandidates.sort(compareCostCellVogel);
+            }
             CostCell chosenCostCell = allocationCandidates.get(0);
 
             //allocating transport to chosen cell
-            Double allocationAmount = Math.min(supply.get(chosenCostCell.positionRow).remaining, demand.get(chosenCostCell.positionColumn).remaining);
+            Double supplyMaxAllocation =supply.get(chosenCostCell.positionRow).remaining;
+            Double demandMaxAllocation=demand.get(chosenCostCell.positionColumn).remaining;
+            Double allocationAmount = Math.min(supplyMaxAllocation,demandMaxAllocation);
             chosenCostCell.alloted = allocationAmount;
-            supply.get(chosenCostCell.positionRow).remaining -= allocationAmount;
-            demand.get(chosenCostCell.positionColumn).remaining -= allocationAmount;
+            supply.get(chosenCostCell.positionRow).remaining = supplyMaxAllocation - allocationAmount;
+            demand.get(chosenCostCell.positionColumn).remaining = demandMaxAllocation - allocationAmount;
 
 
             // marking supply as used if emptied
@@ -311,8 +316,12 @@ public class TransportProblem {
             }
             //marking demand as used if emptied
             if(demand.get(chosenCostCell.positionColumn).remaining.equals(0.0)){
-                demandUsed[chosenCostCell.positionRow] = true;
+                demandUsed[chosenCostCell.positionColumn] = true;
             }
+            if(breakCounter>15){
+                break;
+            }
+            //breakCounter++;
         }
 
 
