@@ -133,7 +133,7 @@ public class TransportProblem {
         while (currentDemand<numOfDemands && currentSupply<numOfSupplies) {
 
             alloted = Math.min(demand.get(currentDemand).remaining, supply.get(currentSupply).remaining);
-            costTable.get(currentSupply).get(currentDemand).setAlloted(alloted);
+            costTable.get(currentSupply).get(currentDemand).alloted = alloted;
 
             supply.get(currentSupply).remaining -= alloted;
             demand.get(currentDemand).remaining -= alloted;

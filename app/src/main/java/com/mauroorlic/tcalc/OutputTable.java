@@ -62,7 +62,12 @@ public class OutputTable {
                 TextView cost = v.findViewById(R.id.inflateable_outputCost);
                 cost.setText(format.format(costCell.cost));
                 TextView alloted = v.findViewById(R.id.inflateable_outputAlloted);
-                alloted.setText(format.format(costCell.alloted));
+                if(!costCell.alloted.equals(0.0)) {
+                    alloted.setText(format.format(costCell.alloted));
+                }
+                else{
+                    alloted.setText("");
+                }
             }
             View v = inflater.inflate(R.layout.output_resource_cell, tableRow, false);
             tableRow.addView(v);
