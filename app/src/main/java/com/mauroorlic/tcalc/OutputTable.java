@@ -57,7 +57,6 @@ public class OutputTable {
             for(int j=0;j<transportProblem.numOfDemands;j++) {
                 View v = inflater.inflate(R.layout.output_cost_cell, tableRow, false);
                 tableRow.addView(v);
-                //TODO: Provjeri dal je tocno
                 CostCell costCell = transportProblem.costTable.get(i).get(j);
 
                 TextView cost = v.findViewById(R.id.inflateable_outputCost);
@@ -68,7 +67,6 @@ public class OutputTable {
             View v = inflater.inflate(R.layout.output_resource_cell, tableRow, false);
             tableRow.addView(v);
             TextView resourceAmount = v.findViewById(R.id.resourceAmount);
-            //TODO: Provjeri dal je tocno
             resourceAmount.setText(format.format(transportProblem.supply.get(i).total));
         }
         tableRow = new TableRow(outputTableReference.getContext());
@@ -83,11 +81,9 @@ public class OutputTable {
         for(int i=0; i<transportProblem.numOfDemands; i++){
             c = inflater.inflate(R.layout.output_resource_cell, tableRow, false);
             TextView resourceAmount = c.findViewById(R.id.resourceAmount);
-            //TODO: Provjeri dal je tocno
             resourceAmount.setText(format.format(transportProblem.demand.get(i).total));
             tableRow.addView(c);
         }
-        //TODO: Alternativno: umjesto input cell resource cell, ali mislim da su istih dimenzija pa je svejedno
         c = inflater.inflate(R.layout.output_resource_cell, tableRow, false);
         tableRow.addView(c);
         c.setEnabled(false);

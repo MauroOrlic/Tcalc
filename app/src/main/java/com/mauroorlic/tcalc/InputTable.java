@@ -100,7 +100,7 @@ public class InputTable {
         c.setEnabled(false);
         c.setVisibility(View.INVISIBLE);
     }
-    public List<List<Double>> getCostTable(){
+    private List<List<Double>> getCostTable(){
         List<List<Double>> costTable = new ArrayList<>();
         String input;
 
@@ -118,7 +118,7 @@ public class InputTable {
         }
         return costTable;
     }
-    public List<Double> getSupplyArray(){
+    private List<Double> getSupplyArray(){
         List<Double> supplyArray = new ArrayList<>();
         String input;
         for(int i=0;i<numOfSupplies;i++){
@@ -132,7 +132,7 @@ public class InputTable {
         }
         return supplyArray;
     }
-    public List<Double> getDemandArray(){
+    private List<Double> getDemandArray(){
         List<Double> demandArray = new ArrayList<>();
         String input;
         for(int i=0;i<numOfDemands;i++){
@@ -147,6 +147,8 @@ public class InputTable {
         return demandArray;
     }
     public TransportProblem getTransportProblem(){
+        List<Double> demandArray = getDemandArray();
+        List<Double> supplyArray = getSupplyArray();
         return new TransportProblem(getDemandArray(), getSupplyArray(), getCostTable());
     }
     public TransportProblem generateAtozmathStock(){

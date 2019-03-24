@@ -51,6 +51,8 @@ public class MainActivity extends AppCompatActivity {
         final EditText demandInput = findViewById(R.id.demandInput);
         Button buildTableButton = findViewById(R.id.build_table);
         final TextView displayTotalCost = findViewById(R.id.displayTotalCost);
+        Button calculateButton = findViewById(R.id.solve_button);
+        calculateButton.setEnabled(false);
 
 
         buildTableButton.setOnClickListener(new View.OnClickListener() {
@@ -60,39 +62,54 @@ public class MainActivity extends AppCompatActivity {
                     supply = Integer.parseInt(supplyInput.getText().toString());
                     demand = Integer.parseInt(demandInput.getText().toString());
                 } catch (NumberFormatException e){
-                    Toast.makeText(MainActivity.this, "You didn't enter", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MainActivity.this, "You didn't enter ", Toast.LENGTH_SHORT).show();
                     return;
                 }
                 inputTable = new InputTable(inputTableLayout,demand, supply);
                 inputTable.buildTable();
+                calculateButton.setEnabled(true);
             }
         });
 
-        Button calculateButton = findViewById(R.id.solve_button);
         calculateButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                transportProblem = new TransportProblem(inputTable.getTransportProblem());
-                //TODO uncomment above and comment bellow line to make input actually work
-                //transportProblem = inputTable.generateAtozmathStock();
+                try {
+                    transportProblem = new TransportProblem(inputTable.getTransportProblem());
+                    //TODO uncomment above and comment bellow line to make input actually work
+                    //transportProblem = inputTable.generateAtozmathStock();
 
-                String selectedInitialMethod = initialSolutionMethod.getSelectedItem().toString();
+                    for(ResourceCell demandCell : transportProblem.demand){
+                        if(demandCell.total.equals(0.0)){
+                            throw new IllegalArgumentException();
+                        }
+                    }
+                    for(ResourceCell supplyCell : transportProblem.supply){
+                        if(supplyCell.total.equals(0.0)){
+                            throw new IllegalArgumentException();
+                        }
+                    }
 
-                if(selectedInitialMethod.contentEquals(adapter.getItem(0))){
-                    transportProblem.initialNorthWest(usingMODI.isChecked(), usingSteppingStone.isChecked());
-                }
-                else if(selectedInitialMethod.contentEquals(adapter.getItem(1))){
-                    transportProblem.initialLeastCost(usingMODI.isChecked(), usingSteppingStone.isChecked());
-                }
-                else if(selectedInitialMethod.contentEquals(adapter.getItem(2))){
-                    transportProblem.initialVogel(usingMODI.isChecked(), usingSteppingStone.isChecked());
-                }
-                OutputTable outputTable = new OutputTable(outputTableLayout, transportProblem);
-                outputTable.buildTable();
+                    String selectedInitialMethod = initialSolutionMethod.getSelectedItem().toString();
 
-                displayTotalCost.setText(("Minimum total cost = "+format.format(transportProblem.totalCost)));
-                displayTotalCost.setImeOptions(EditorInfo.IME_ACTION_NEXT);
-                displayTotalCost.requestFocus();
+                    if (selectedInitialMethod.contentEquals(adapter.getItem(0))) {
+                        transportProblem.initialNorthWest(usingMODI.isChecked(), usingSteppingStone.isChecked());
+                    } else if (selectedInitialMethod.contentEquals(adapter.getItem(1))) {
+                        transportProblem.initialLeastCost(usingMODI.isChecked(), usingSteppingStone.isChecked());
+                    } else if (selectedInitialMethod.contentEquals(adapter.getItem(2))) {
+                        transportProblem.initialVogel(usingMODI.isChecked(), usingSteppingStone.isChecked());
+                    }
+                    OutputTable outputTable = new OutputTable(outputTableLayout, transportProblem);
+                    outputTable.buildTable();
+
+                    displayTotalCost.setText(("Minimum total cost = " + format.format(transportProblem.totalCost)));
+                    displayTotalCost.setImeOptions(EditorInfo.IME_ACTION_NEXT);
+                    displayTotalCost.requestFocus();
+                }
+                catch (IllegalArgumentException e){
+                    Toast.makeText(MainActivity.this, "Supply/Demand values cannot be zero", Toast.LENGTH_SHORT).show();
+                    return;
+                }
             }
         });
 

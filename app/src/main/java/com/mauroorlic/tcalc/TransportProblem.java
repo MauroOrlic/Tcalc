@@ -77,6 +77,7 @@ public class TransportProblem {
         Double totalDemand = 0.0;
         Double totalSupply = 0.0;
         for (ResourceCell d : demand) {
+
             totalDemand += d.getTotal();
         }
         for (ResourceCell s : supply) {
@@ -186,7 +187,6 @@ public class TransportProblem {
             return difference;
         };
         costCellList.sort(compareCostCellLC);
-        //TODO implement some sort of sorting algorithm for costCellList by cost. get it? some SORT of algorithm? :D
         Double alloted = 0.0;
 
             while(costCellList.size()!=0){
@@ -443,11 +443,9 @@ public class TransportProblem {
                 }
 
                 if(breakOut){break;}
-                //if(i==u.length-1 && j==v.length-1){return;}
             }
             if(breakOut){break;}
         }
-        //optimizeMODI();
     }
 
     public void optimizeSteppingStone() {
@@ -506,7 +504,6 @@ public class TransportProblem {
     private CostCell[] getClosedPath(CostCell startingCostCell){
         final List<CostCell> path = matrixToList();
         path.add(0, startingCostCell);
-        //(path.removeIf(e -> {Shipment[] nbrs = getNeighbors(e, path);
         while (path.removeIf(e -> {
             CostCell[] neighbors = getNeighbors(e,path);
             return  neighbors[0] == null || neighbors[1] ==null;
@@ -515,7 +512,6 @@ public class TransportProblem {
         CostCell[] stones = path.toArray(new CostCell[path.size()]);
         CostCell previous = startingCostCell;
         for(int i=0; i< stones.length;i++){
-            //Log.d(TAG, "getClosedPath: "+i+ "|"+previous);
             stones[i] = previous;
             previous = getNeighbors(previous,path)[i % 2];
         }
@@ -533,12 +529,8 @@ public class TransportProblem {
         return costList;
     }
     private CostCell[] getNeighbors(CostCell startingCostCell, List<CostCell> list){
-        //Log.d(TAG, "getNeighbors: "+"||"+startingCostCell+list.size());
         CostCell[] neighbors = new CostCell[2];
         for(CostCell currentCostCell : list){
-            //TODO implement object Comparator or ??operator overloading??
-            /*if(currentCostCell.cost != startingCostCell.cost && currentCostCell.alloted != startingCostCell.alloted && currentCostCell.positionColumn != startingCostCell.positionColumn && currentCostCell.positionRow != startingCostCell.positionRow){
-              */
             if(currentCostCell != startingCostCell){
                 if(currentCostCell.positionRow.equals(startingCostCell.positionRow) && neighbors[0]==null){
                     neighbors[0] = currentCostCell;
