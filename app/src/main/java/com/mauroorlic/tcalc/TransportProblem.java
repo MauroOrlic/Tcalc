@@ -74,7 +74,7 @@ public class TransportProblem {
         this.totalCost = totalCost;
     }
 
-    public void balanceProblem() {
+    private void balanceProblem() {
         Double totalDemand = 0.0;
         Double totalSupply = 0.0;
         for (ResourceCell d : demand) {
@@ -111,7 +111,7 @@ public class TransportProblem {
 
     }
 
-    public void clearSolution() {
+    private void clearSolution() {
         for (ResourceCell e : supply) {
             e.remaining = e.total;
         }
@@ -134,12 +134,11 @@ public class TransportProblem {
         while (currentDemand < numOfDemands && currentSupply < numOfSupplies) {
 
             alloted = Math.min(demand.get(currentDemand).remaining, supply.get(currentSupply).remaining);
-            costTable.get(currentSupply).get(currentDemand).alloted = alloted; //for certain problems throws ArrayIndexOutOfBounds exception, not sure why
+            costTable.get(currentSupply).get(currentDemand).alloted = alloted;
 
             supply.get(currentSupply).remaining -= alloted;
             demand.get(currentDemand).remaining -= alloted;
 
-            int counter = 0;
             if (supply.get(currentSupply).remaining == 0.0) {
                 currentSupply += 1;
             }
@@ -212,7 +211,6 @@ public class TransportProblem {
         getTotalCost();
     }
 
-    //DOESNT WORK dont know if I will be able to fix
     public void initialVogel(Boolean optimizeMODI, Boolean optimizeSteppingStone) {
         clearSolution();
         balanceProblem();
@@ -245,7 +243,6 @@ public class TransportProblem {
             return difference;
         };
 
-        int breakCounter = 0;
         while (containsFalse(supplyUsed) && containsFalse(demandUsed)) {
 
             List<Double> costGroup = new ArrayList<>();
@@ -318,10 +315,6 @@ public class TransportProblem {
             if(demand.get(chosenCostCell.positionColumn).remaining.equals(0.0)){
                 demandUsed[chosenCostCell.positionColumn] = true;
             }
-            if(breakCounter>15){
-                break;
-            }
-            //breakCounter++;
         }
 
 
@@ -444,7 +437,7 @@ public class TransportProblem {
         }
     }
 
-    public void optimizeSteppingStone() {
+    private void optimizeSteppingStone() {
         double maxReduction = 0;
         CostCell[] move = null;
         CostCell leaving = null;
@@ -488,7 +481,6 @@ public class TransportProblem {
             boolean plus = true;
             for (CostCell s : move) {
                 s.alloted += plus ? q : -q;
-                //costTable.get(s.positionRow).set(s.positionColumn, s.alloted == 0 ? new CostCell(0.0,0.0, s.positionRow, s.positionColumn):s);
                 costTable.get(s.positionRow).get(s.positionColumn).alloted = s.alloted;
                 costTable.get(s.positionRow).get(s.positionColumn).cost = s.cost;
                 plus = !plus;

@@ -14,13 +14,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class InputTable {
-    TableLayout inputTableReference;
-    List<List<EditText>> inputCells = new ArrayList<>();
-    List<EditText> demandInputCells = new ArrayList<>();
-    List<EditText> supplyInputCells = new ArrayList<>();
-    int numOfDemands;
-    int numOfSupplies;
-    Integer currentInputCellID;
+    private TableLayout inputTableReference;
+    private List<List<EditText>> inputCells = new ArrayList<>();
+    private List<EditText> demandInputCells = new ArrayList<>();
+    private List<EditText> supplyInputCells = new ArrayList<>();
+    private int numOfDemands;
+    private int numOfSupplies;
+    private Integer currentInputCellID;
     public InputTable(TableLayout inputTableReference, int demands, int supplies) {
         this.inputTableReference = inputTableReference;
         this.numOfDemands = demands;
@@ -56,7 +56,6 @@ public class InputTable {
                 View v = inflater.inflate(R.layout.input_cell, tableRow, false);
                 tableRow.addView(v);
                 EditText a = v.findViewById(R.id.inflateable_inputCell);
-                //TODO implement function that creates an edittext and links focuses
                 inputCells.get(i).add(a);
                 inputCells.get(i).get(j).setImeOptions(EditorInfo.IME_ACTION_NEXT);
                 inputCells.get(i).get(j).setId(currentInputCellID);
@@ -147,8 +146,6 @@ public class InputTable {
         return demandArray;
     }
     public TransportProblem getTransportProblem(){
-        List<Double> demandArray = getDemandArray();
-        List<Double> supplyArray = getSupplyArray();
         return new TransportProblem(getDemandArray(), getSupplyArray(), getCostTable());
     }
     public TransportProblem generateAtozmathStock(){
