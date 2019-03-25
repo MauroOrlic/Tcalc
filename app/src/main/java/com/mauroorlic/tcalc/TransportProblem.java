@@ -79,33 +79,30 @@ public class TransportProblem {
         Double totalSupply = 0.0;
         for (ResourceCell d : demand) {
 
-            totalDemand += d.getTotal();
+            totalDemand += d.total;
         }
         for (ResourceCell s : supply) {
-            totalSupply += s.getTotal();
+            totalSupply += s.total;
         }
         if (totalDemand.equals(totalSupply)) {
             return;
         } else if (totalDemand > totalSupply) {
-            numOfSupplies += 1;
             supply.add(new ResourceCell(totalDemand - totalSupply));
+            numOfSupplies = supply.size();
             dummy = 1;
 
             costTable.add(new ArrayList<CostCell>());
-            for (int i = 0; i < supply.size(); i++) {
-                costTable.get(demand.size() - 1).add(new CostCell(0.0, costTable.size() - 1, i));
+            for (int i = 0; i < demand.size(); i++) {
+                costTable.get(supply.size()-1).add(new CostCell(0.0, supply.size()-1, i));
             }
 
         } else if (totalDemand < totalSupply) {
-            numOfDemands += 1;
             demand.add(new ResourceCell(totalSupply - totalDemand));
+            numOfDemands = demand.size();
             dummy = -1;
 
-            /*for (ArrayList<CostCell> row : costTable) {
-                row.add(new CostCell(0.0));
-            }*/
-            for (int i = 0; i < numOfSupplies; i++) {
-                costTable.get(i).add(new CostCell(0.0, i, numOfDemands - 1));
+            for (int i = 0; i < supply.size(); i++) {
+                costTable.get(i).add(new CostCell(0.0, i, demand.size()-1));
             }
         }
 
@@ -126,8 +123,8 @@ public class TransportProblem {
     }
 
     public void initialNorthWest(Boolean optimizeMODI, Boolean optimizeSteppingStone) {
-        clearSolution();
         balanceProblem();
+        clearSolution();
         int currentDemand = 0;
         int currentSupply = 0;
         Double alloted = 0.0;
