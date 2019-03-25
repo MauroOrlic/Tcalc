@@ -148,6 +148,36 @@ public class InputTable {
     public TransportProblem getTransportProblem(){
         return new TransportProblem(getDemandArray(), getSupplyArray(), getCostTable());
     }
+    public TransportProblem generateSpecial(){
+        List<Double> supplyArray = new ArrayList<>();
+        List<Double> demandArray = new ArrayList<>();
+        List<List<Double>> costTable = new ArrayList<>();
+
+        supplyArray.add(6.0);
+        supplyArray.add(5.0);
+
+        demandArray.add(6.0);
+        demandArray.add(5.0);
+        demandArray.add(2.0);
+        demandArray.add(5.0);
+        demandArray.add(3.0);
+
+        costTable.add(new ArrayList<Double>());
+        costTable.get(0).add(2.0);
+        costTable.get(0).add(5.0);
+        costTable.get(0).add(1.0);
+        costTable.get(0).add(4.0);
+        costTable.get(0).add(5.0);
+
+        costTable.add(new ArrayList<Double>());
+        costTable.get(1).add(3.0);
+        costTable.get(1).add(5.0);
+        costTable.get(1).add(5.0);
+        costTable.get(1).add(7.0);
+        costTable.get(1).add(4.0);
+
+        return new TransportProblem(demandArray, supplyArray, costTable);
+    }
     public TransportProblem generateAtozmathStock(){
         List<Double> supplyArray = new ArrayList<>();
         List<Double> demandArray = new ArrayList<>();

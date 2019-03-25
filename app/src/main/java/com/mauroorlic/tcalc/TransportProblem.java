@@ -366,10 +366,10 @@ public class TransportProblem {
                 for (int j = 0; j < v.length; j++) {
                     if (costMatrix[i][j] != null) {
                         if (u[i] == null && v[j] != null) {
-                            u[i] = costMatrix[i][j] - v[j];
+                            u[i] = (costMatrix[i][j]==Double.MIN_VALUE?0.0:costMatrix[i][j]) - v[j];
 
                         } else if (v[j] == null && u[i] != null) {
-                            v[j] = costMatrix[i][j] - u[i];
+                            v[j] = (costMatrix[i][j]==Double.MIN_VALUE?0.0:costMatrix[i][j]) - u[i];
                         } else if (v[j] == null && u[i] == null) {
                             tryAgain = true;
                         }
@@ -544,12 +544,13 @@ public class TransportProblem {
                 }
             }
         }
-        if (allotedCellCount < numOfSupplies + numOfDemands - 1) {
+
+        while(allotedCellCount < numOfSupplies + numOfDemands - 1) {
             for (List<CostCell> row : costTable) {
                 for (CostCell costCell : row) {
                     if (costCell.alloted == 0.0 && getClosedPath(costCell).length == 0) {
                         costCell.alloted = epsilon;
-                        return;
+                        allotedCellCount++;
                     }
                 }
             }

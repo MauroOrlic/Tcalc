@@ -77,6 +77,7 @@ public class MainActivity extends AppCompatActivity {
                     transportProblem = new TransportProblem(inputTable.getTransportProblem());
                     //TODO uncomment above and comment bellow line to make input actually work
                     //transportProblem = inputTable.generateAtozmathStock();
+                    //transportProblem = inputTable.generateSpecial();
 
                     for(ResourceCell demandCell : transportProblem.demand){
                         if(demandCell.total.equals(0.0)){
