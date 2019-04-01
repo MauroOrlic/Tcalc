@@ -1,7 +1,5 @@
 package com.mauroorlic.tcalc;
 
-import android.util.Log;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -149,7 +147,6 @@ public class TransportProblem {
             optimizeMODI();
         }
         if (optimizeSteppingStone) {
-            Log.d("activated", "optimizeSteppingStone launched");
             optimizeSteppingStone();
         }
         getTotalCost();
@@ -366,10 +363,10 @@ public class TransportProblem {
                 for (int j = 0; j < v.length; j++) {
                     if (costMatrix[i][j] != null) {
                         if (u[i] == null && v[j] != null) {
-                            u[i] = (costMatrix[i][j]==Double.MIN_VALUE?0.0:costMatrix[i][j]) - v[j];
+                            u[i] = costMatrix[i][j] - v[j];
 
                         } else if (v[j] == null && u[i] != null) {
-                            v[j] = (costMatrix[i][j]==Double.MIN_VALUE?0.0:costMatrix[i][j]) - u[i];
+                            v[j] = costMatrix[i][j] - u[i];
                         } else if (v[j] == null && u[i] == null) {
                             tryAgain = true;
                         }

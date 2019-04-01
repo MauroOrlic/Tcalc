@@ -1,7 +1,6 @@
 package com.mauroorlic.tcalc;
 
-import android.content.res.ColorStateList;
-import android.graphics.Color;
+
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
